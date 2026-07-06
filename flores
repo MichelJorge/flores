@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jardim de Girassóis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #1a1c2e, #0c0d14);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Grama e base do jardim */
+        .garden {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding-bottom: 20px;
+        }
+
+        /* Estilização dos Balões de Mensagem */
+        .message-bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInBubble 1.5s ease forward 2s;
+            pointer-events: none;
+        }
+
+        @keyframes fadeInBubble {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estrutura do Girassol */
+        .sunflower {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transform-origin: bottom center;
+            animation: grow 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Animação de crescimento da planta */
+        @keyframes grow {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        /* O balanço suave com o vento */
+        .flower-head-container {
+            animation: sway 4s ease-in-out infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        @keyframes sway {
+            0% { transform: rotate(-3deg); }
+            100% { transform: rotate(3deg); }
+        }
+
+        /* SVG do Girassol */
+        .sunflower-svg {
+            width: 160px;
+            height: 380px;
+        }
+
+        /* Efeito de brilho sutil nos girassóis */
+        .center-disk {
+            fill: #3b2214;
+        }
+        
+        .petal {
+            fill: #ffd700;
+            transition: fill 0.3s;
+        }
+
+        .petal-inner {
+            fill: #ffa500;
+        }
+
+        .stem, .leaf {
+            fill: #2d5a27;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="garden" id="garden">
+        <!-- Os girassóis e balões serão gerados dinamicamente aqui pelo JS -->
+    </div>
+
+    <script>
+        // Suas mensagens personalizadas (estilo o feed do vídeo)
+        const messages = [
+            "Você é minha pessoa favorita 🌻",
+            "Sorte a minha ter você aqui",
+            "Se o amor tivesse um código...",
+            "Cada detalhe me lembra você ✨"
+        ];
+
+        const garden = document.getElementById('garden');
+
+        // Estrutura SVG de um girassol bem detalhado
+        const sunflowerSVGTemplate = `
+            <svg class="sunflower-svg" viewBox="0 0 120 300" xmlns="http://www.w3.org/2000/svg">
+                <!-- Caule -->
+                <path class="stem" d="M60,100 Q65,200 60,300" stroke="#2d5a27" stroke-width="6" fill="none"/>
+                
+                <!-- Folhas -->
+                <path class="leaf" d="M62,180 Q90,160 80,140 Q62,165 62,180 Z" />
+                <path class="leaf" d="M58,220 Q20,200 35,180 Q58,205 58,220 Z" />
+
+                <!-- Cabeça da Flor (Agrupada para o efeito de balanço) -->
+                <g class="flower-head-container">
+                    <g transform="translate(60, 100)">
+                        <!-- Pétalas Traseiras (Laranja/Escuras) -->
+                        <g transform="rotate(15)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(45)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(75)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(105)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(135)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(165)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(195)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(225)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(255)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(285)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(315)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+                        <g transform="rotate(345)"><path class="petal-inner" d="M0,0 C-12,-35 0,-55 0,-55 C0,-55 12,-35 0,0" /></g>
+
+                        <!-- Pétalas Principais (Amarelo Ouro) -->
+                        <g transform="rotate(0)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(30)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(60)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(90)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(120)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(150)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(180)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(210)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(240)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(270)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(300)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        <g transform="rotate(330)"><path class="petal" d="M0,0 C-10,-40 0,-60 0,-60 C0,-60 10,-40 0,0" /></g>
+                        
+                        <!-- Miolo do Girassol -->
+                        <circle class="center-disk" cx="0" cy="0" r="22" />
+                        <circle cx="0" cy="0" r="18" fill="none" stroke="#26160c" stroke-width="2" stroke-dasharray="4,2" />
+                    </g>
+                </g>
+            </svg>
+        `;
+
+        // Função para construir o jardim na tela
+        function createGarden() {
+            messages.forEach((text, index) => {
+                // Div container da flor
+                const flowerWrapper = document.createElement('div');
+                flowerWrapper.className = 'sunflower';
+                
+                // Variabilidade de tamanho e tempo de crescimento aleatórios para naturalidade
+                const delay = index * 0.4; 
+                const scale = 0.8 + Math.random() * 0.4;
+                flowerWrapper.style.animationDelay = `${delay}s`;
+                flowerWrapper.style.transform = `scale(${scale})`;
+
+                flowerWrapper.innerHTML = sunflowerSVGTemplate;
+
+                // Criação do balão de texto associado a este girassol
+                const bubble = document.createElement('div');
+                bubble.className = 'message-bubble';
+                bubble.innerText = text;
+                
+                // Posiciona os balões em alturas alternadas acima dos girassóis
+                bubble.style.top = `${120 + (index % 2 * 40)}px`;
+                bubble.style.animationDelay = `${delay + 1.8}s`;
+
+                flowerWrapper.appendChild(bubble);
+                garden.appendChild(flowerWrapper);
+            });
+        }
+
+        // Inicializa a animação assim que a página carrega
+        window.addEventListener('DOMContentLoaded', createGarden);
+    </script>
+</body>
+</html>
