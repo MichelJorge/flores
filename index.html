@@ -1,306 +1,89 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"><title>Um convite especial 🌻</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"><style>
-  :root{
-    --navy-deep:#0b1730;
-    --navy-mid:#132a52;
-    --navy-hi:#274a7d;
-    --swirl:#3f74ac;
-    --sunflower:#ffc300;
-    --sunflower-dark:#a15b0d;
-    --daisy-white:#ffffff;
-    --daisy-center:#fff59d;
-    --blue-rose:#0017ff;
-    --blue-puff:#3399ff;
-    --leaf:#5c9c4e;
-    --leaf-dark:#3a6630;
-    --cream:#faf3e2;
-    --cream-dim:#efe4c9;
-    --gold:#d9a441;
-    --gold-hi:#f1c876;
-    --ink:#241e0f;
-    --brown:#3b2214;
-    --paper-blue-outer: #0d2a57;
-    --paper-blue-inner: #0a2144;
-    --paper-gold: #b58a37;
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    font-family:'Poppins',sans-serif;
-    background:var(--navy-deep);
-    color:var(--cream);
-    overflow:hidden;
-    min-height:100vh;
-    min-height:100dvh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Convite Especial 🌻</title>
+<style>
+    :root {
+        --navy-deep: #0b1730; --gold: #d9a441; --cream: #faf3e2; --ink: #241e0f;
+        --sunflower: #ffc300; --blue-rose: #0017ff; --white: #ffffff;
+    }
+    body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--navy-deep); color: var(--cream); display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+    .app { width: 100%; max-width: 400px; height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    
+    /* Estilos do Buquê */
+    .bouquet-box { width: 100%; max-width: 300px; height: 350px; }
+    .f-anim { animation: appear 1.5s ease-out forwards; opacity: 0; }
+    @keyframes appear { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    
+    .btn { background: var(--gold); border: none; padding: 15px 30px; border-radius: 25px; color: var(--ink); font-weight: bold; cursor: pointer; margin-top: 20px; }
+    .screen { display: none; width: 100%; text-align: center; }
+    .screen.active { display: block; }
+    
+    /* Grade de Horários */
+    .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+    .time-chip { padding: 10px; border: 1px solid var(--gold); border-radius: 10px; cursor: pointer; }
+    .time-chip.selected { background: var(--gold); color: var(--navy-deep); }
+</style>
+</head>
+<body>
 
-  /* ---------- background: starry night ---------- */
-  .sky{
-    position:fixed; inset:0;
-    background:
-      radial-gradient(ellipse at 20% 15%, rgba(63,116,172,.55), transparent 55%),
-      radial-gradient(ellipse at 80% 70%, rgba(39,74,125,.6), transparent 60%),
-      linear-gradient(160deg, var(--navy-deep) 0%, var(--navy-mid) 55%, var(--navy-deep) 100%);
-    overflow:hidden;
-    z-index:0;
-  }
-  .swirl{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(18px);
-    opacity:.35;
-    background:conic-gradient(from 0deg, var(--swirl), transparent 40%, var(--navy-hi) 60%, transparent 90%);
-    animation:swirlRotate 50s linear infinite;
-  }
-  .swirl.s1{width:340px; height:340px; top:-80px; left:-90px; animation-duration:70s;}
-  .swirl.s2{width:260px; height:260px; bottom:-60px; right:-70px; animation-duration:55s; animation-direction:reverse;}
-  .swirl.s3{width:200px; height:200px; top:40%; left:60%; animation-duration:40s;}
-  @keyframes swirlRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+<div class="app">
+    <section class="screen active" id="s1">
+        <h2>Um convite especial</h2>
+        <div class="bouquet-box">
+            <svg viewBox="0 0 200 250">
+                <path d="M50,250 L150,250 L170,150 L30,150 Z" fill="#0d2a57" />
+                <circle cx="70" cy="80" r="30" fill="var(--sunflower)" class="f-anim" style="animation-delay: 0.5s"/>
+                <circle cx="130" cy="80" r="30" fill="var(--sunflower)" class="f-anim" style="animation-delay: 0.7s"/>
+                <circle cx="100" cy="130" r="20" fill="var(--blue-rose)" class="f-anim" style="animation-delay: 0.9s"/>
+                <rect x="80" y="140" width="40" height="20" fill="var(--gold)" />
+            </svg>
+        </div>
+        <button class="btn" onclick="next(2)">Vamos combinar 💫</button>
+    </section>
 
-  .star{
-    position:absolute;
-    background:#fff7dd;
-    border-radius:50%;
-    animation:twinkle 3.2s ease-in-out infinite;
-  }
-  @keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:1;}}
+    <section class="screen" id="s2">
+        <h3>Escolha o horário</h3>
+        <div class="time-grid" id="timeGrid"></div>
+        <button class="btn" onclick="next(3)" id="btnNext2" disabled>Continuar</button>
+    </section>
 
-  /* ---------- app shell ---------- */
-  .app{
-    position:relative;
-    z-index:1;
-    width:100%;
-    max-width:430px;
-    height:100vh;
-    height:100dvh;
-    max-height:900px;
-    display:flex;
-    flex-direction:column;
-    padding:0;
-  }
+    <section class="screen" id="s3">
+        <h3>Pronto!</h3>
+        <button class="btn" onclick="send()">Enviar no WhatsApp 💌</button>
+    </section>
+</div>
 
-  .progress{
-    display:none;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    padding:18px 0 6px;
-    z-index:3;
-  }
-  .progress.show{display:flex;}
-  .dot{width:7px; height:7px; border-radius:50%; background:rgba(250,243,226,.25); transition:all .35s ease;}
-  .dot.active{background:var(--gold-hi); width:20px; border-radius:5px;}
-  .dot.done{background:var(--gold);}
+<script>
+    const state = { time: null };
+    
+    // Gerar horários 10:00 às 21:00
+    const grid = document.getElementById('timeGrid');
+    for(let h=10; h<=21; h++){
+        const t = `${h}:00`;
+        const div = document.createElement('div');
+        div.className = 'time-chip';
+        div.innerText = t;
+        div.onclick = () => {
+            state.time = t;
+            document.querySelectorAll('.time-chip').forEach(el => el.classList.remove('selected'));
+            div.classList.add('selected');
+            document.getElementById('btnNext2').disabled = false;
+        };
+        grid.appendChild(div);
+    }
 
-  .back-btn{
-    position:absolute;
-    top:16px; left:14px;
-    z-index:5;
-    background:rgba(250,243,226,.1);
-    border:1px solid rgba(250,243,226,.25);
-    color:var(--cream);
-    width:36px; height:36px;
-    border-radius:50%;
-    font-size:16px;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-  }
-  .screen.active .back-btn{display:flex;}
+    function next(step) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('s' + step).classList.add('active');
+    }
 
-  .screen{
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    flex:1;
-    width:100%;
-    padding:14px 24px 28px;
-    position:relative;
-    overflow-y:auto;
-  }
-  .screen.active{display:flex;}
-  .screen.active > *{animation:fadeUp .7s ease both;}
-
-  @keyframes fadeUp{
-    0%{opacity:0; transform:translateY(16px);}
-    100%{opacity:1; transform:translateY(0);}
-  }
-
-  h1,h2{font-family:'Playfair Display',serif; margin:0;}
-
-  /* ---------- SCREEN 1: bouquet ---------- */
-  #screen1{justify-content:center; padding-top:0;}
-  .bouquet-wrap{
-    width:100%;
-    max-width:300px;
-    aspect-ratio:3/4;
-    margin: 0 auto 20px;
-    animation:none !important;
-  }
-  .bouquet-wrap svg{width:100%; height:100%; overflow:visible;}
-
-  .stem{
-    fill:none;
-    stroke:var(--leaf-dark);
-    stroke-width:5.5;
-    stroke-linecap:round;
-    stroke-dasharray:260;
-    stroke-dashoffset:260;
-    animation:drawStem 1.3s ease forwards;
-  }
-  @keyframes drawStem{to{stroke-dashoffset:0;}}
-
-  .leaf{
-    fill:var(--leaf);
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:leafPop .6s ease forwards;
-  }
-  @keyframes leafPop{
-    0%{opacity:0; transform:scale(0) rotate(-14deg);}
-    70%{opacity:1;}
-    100%{opacity:1; transform:scale(1) rotate(0deg);}
-  }
-
-  .paper{
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:50% 100%;
-    animation:paperRise 1s cubic-bezier(.2,.8,.3,1.1) forwards;
-  }
-  @keyframes paperRise{
-    0%{opacity:0; transform:scaleY(0);}
-    100%{opacity:1; transform:scaleY(1);}
-  }
-
-  .puff-layer{
-    opacity:0;
-    animation: fadeInPuff 2.5s ease forwards;
-  }
-  @keyframes fadeInPuff{
-    0%{ opacity:0; }
-    100%{ opacity:1; }
-  }
-
-  .flower{
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:flowerPop 0.8s cubic-bezier(.3,1.4,.5,1) forwards;
-  }
-  @keyframes flowerPop{
-    0%{opacity:0; transform:scale(0) rotate(-15deg);}
-    80%{opacity:1; transform:scale(1.1) rotate(5deg);}
-    100%{opacity:1; transform:scale(1) rotate(0deg);}
-  }
-
-  .ribbon{
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:ribbonPop .8s cubic-bezier(.3,1.6,.4,1) forwards;
-  }
-  @keyframes ribbonPop{
-    0%{opacity:0; transform:scale(0) rotate(-18deg);}
-    60%{opacity:1; transform:scale(1.12) rotate(6deg);}
-    100%{opacity:1; transform:scale(1) rotate(0deg);}
-  }
-
-  .message{
-    text-align:center;
-    margin-top:6px;
-  }
-  .message .line1{
-    font-family:'Dancing Script',cursive;
-    font-size:clamp(26px,7vw,34px);
-    color:var(--gold-hi);
-    opacity:0;
-    animation:fadeUp .8s ease forwards;
-    animation-delay:2.6s;
-    display:block;
-  }
-  .message .line2{
-    font-family:'Playfair Display',serif;
-    font-style:italic;
-    font-size:clamp(17px,4.6vw,20px);
-    color:var(--cream);
-    opacity:.92;
-    margin-top:6px;
-    opacity:0;
-    animation:fadeUp .8s ease forwards;
-    animation-delay:3.3s;
-    display:block;
-  }
-  .cta{
-    opacity:0;
-    animation:fadeUp .8s ease forwards;
-    animation-delay:4.2s;
-    margin-top:20px;
-  }
-
-  /* ---------- buttons ---------- */
-  .btn{
-    font-family:'Poppins',sans-serif;
-    font-weight:500;
-    font-size:15px;
-    letter-spacing:.3px;
-    border:none;
-    border-radius:999px;
-    padding:14px 30px;
-    background:linear-gradient(135deg, var(--gold-hi), var(--gold));
-    color:#2a1c05;
-    cursor:pointer;
-    box-shadow:0 6px 18px rgba(217,164,65,.35);
-    transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;
-  }
-  .btn:active{transform:scale(.96);}
-  .btn:disabled{opacity:.35; box-shadow:none; cursor:not-allowed;}
-  .btn.ghost{
-    background:transparent;
-    border:1.5px solid var(--gold);
-    color:var(--gold-hi);
-    box-shadow:none;
-  }
-
-  /* ---------- SCREEN 2: calendar ---------- */
-  .title-block{text-align:center; margin-bottom:18px;}
-  .title-block h2{font-size:clamp(21px,5.5vw,26px); color:var(--cream);}
-  .title-block .sub{font-size:13px; color:var(--gold-hi); font-style:italic; font-family:'Playfair Display',serif; margin-top:4px;}
-
-  .card-panel{
-    background:linear-gradient(160deg, var(--cream), var(--cream-dim));
-    color:var(--ink);
-    border-radius:22px;
-    padding:18px 16px;
-    width:100%;
-    max-width:360px;
-    box-shadow:0 14px 30px rgba(0,0,0,.35);
-  }
-
-  .cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
-  .cal-head button{
-    background:none; border:none; font-size:18px; color:var(--brown); cursor:pointer;
-    width:32px; height:32px; border-radius:50%;
-  }
-  .cal-head button:hover{background:rgba(90,58,30,.08);}
-  .cal-month{font-family:'Playfair Display',serif; font-weight:600; font-size:16px; text-transform:capitalize;}
-
-  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center;}
-  .cal-grid .wd{font-size:11px; color:var(--brown); opacity:.6; padding-bottom:4px;}
-  .cal-day{
-    aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-    border-radius:50%; font-size:13px; cursor:pointer; color:var(--ink);
-    transition:all .15s ease;
-  }
-  .cal-day.disabled{opacity:.25; pointer-events:none;}
-  .cal-day.empty{visibility:hidden;}
-  .cal-day:not(.disabled):not(.empty):hover{background:rgba(217,164,65,.25);}
-  .cal-day.selected{background:var(--navy-deep); color:var(--gold-hi); font-weight:6
-
-```
+    function send() {
+        window.location.href = `https://wa.me/5511973513832?text=Oi! Escolhi o horário das ${state.time} para o nosso encontro.`;
+    }
+</script>
+</body>
+</html>
+  
