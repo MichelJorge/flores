@@ -1,15 +1,3 @@
-Aqui está o seu código completamente revisado.
-
-Para atender exatamente aos seus pedidos, fiz as seguintes melhorias:
-
-1. **Buquê de Girassóis realista e dinâmico**: Substituí as flores genéricas antigas por girassóis detalhados desenhados em SVG, com pétalas douradas pontiagudas dispostas em camadas circulares e um miolo escuro texturizado com sementes douradas.
-2. **Efeito do buquê "se formando"**: Mantive e aprimorei as animações para que as pétalas e miolos dos girassóis brotem de forma sequencial e elegante.
-3. **Mais horários**: Ampliei consideravelmente a lista de horários estáticos na tela para cobrir intervalos de 30 em 30 minutos em quase todo o dia útil e noite.
-4. **Remoção do "Outro horário"**: Deletei a opção de horário personalizado e o campo de input associado para deixar o visual mais limpo e direto.
-
-Substitua todo o conteúdo do seu arquivo por este código atualizado:
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -20,17 +8,19 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy-deep:#0b0a1a;
-    --navy-mid:#161233;
-    --navy-hi:#2b1f52;
-    --swirl:#4a2e8a;
-    --flower-light:#fde047;
-    --flower-mid:#eab308;
-    --flower-dark:#ca8a04;
-    --flower-center:#241405;
-    --leaf:#3fae4a;
-    --leaf-dark:#1f7a34;
-    --berry:#7a3fbf;
+    --navy-deep:#070512;
+    --navy-mid:#0f0b24;
+    --navy-hi:#1a123a;
+    --swirl:#3b1d70;
+    --flower-light:#f3e8ff;
+    --flower-mid:#c084fc;
+    --flower-dark:#7e22ce;
+    --flower-center:#fef08a;
+    --flower-glow:#a855f7;
+    --leaf:#9333ea;
+    --leaf-dark:#4c1d95;
+    --grass-green:#22c55e;
+    --berry:#6b21a8;
     --cream:#faf3e2;
     --cream-dim:#efe4c9;
     --gold:#d9a441;
@@ -57,8 +47,8 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
   .sky{
     position:fixed; inset:0;
     background:
-      radial-gradient(ellipse at 20% 15%, rgba(74,46,138,.5), transparent 55%),
-      radial-gradient(ellipse at 80% 70%, rgba(43,31,82,.6), transparent 60%),
+      radial-gradient(ellipse at 20% 15%, rgba(59,29,112,.5), transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(26,18,58,.6), transparent 60%),
       linear-gradient(160deg, var(--navy-deep) 0%, var(--navy-mid) 55%, var(--navy-deep) 100%);
     overflow:hidden;
     z-index:0;
@@ -162,7 +152,7 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
   .stem{
     fill:none;
     stroke:var(--leaf-dark);
-    stroke-width:3.2;
+    stroke-width:3.5;
     stroke-linecap:round;
     stroke-dasharray:300;
     stroke-dashoffset:300;
@@ -171,7 +161,7 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
   @keyframes drawStem{to{stroke-dashoffset:0;}}
 
   .blade{
-    fill:var(--leaf);
+    fill:var(--grass-green);
     opacity:0;
     transform-box:fill-box;
     transform-origin:bottom center;
@@ -179,7 +169,7 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
   }
   @keyframes bladeGrow{
     0%{opacity:0; transform:scaleY(0) scaleX(.6);}
-    100%{opacity:1; transform:scaleY(1) scaleX(1);}
+    100%{opacity:0.85; transform:scaleY(1) scaleX(1);}
   }
 
   .leaf{
@@ -211,18 +201,33 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
     opacity:0;
     transform-box:fill-box;
     transform-origin:center;
-    animation:petalPop .55s cubic-bezier(.3,1.4,.5,1) forwards;
+    animation:petalPop .6s cubic-bezier(.3,1.4,.5,1) forwards;
   }
   @keyframes petalPop{
     0%{opacity:0; transform:scale(0);}
-    65%{opacity:1; transform:scale(1.15);}
-    100%{opacity:1; transform:scale(1);}
+    65%{opacity:0.9; transform:scale(1.1);}
+    100%{opacity:0.85; transform:scale(1);}
   }
+  
   .fcenter{
     opacity:0;
     transform-box:fill-box;
     transform-origin:center;
-    animation:puffPop .5s ease forwards;
+    animation:centerPop .5s ease forwards;
+  }
+  @keyframes centerPop{
+    0%{opacity:0; transform:scale(0); filter:blur(4px);}
+    100%{opacity:1; transform:scale(1); filter:blur(0px);}
+  }
+
+  .magic-particle {
+    opacity:0;
+    animation:floatParticle 2.5s ease-in-out infinite alternate;
+  }
+  @keyframes floatParticle {
+    0% { opacity:0; transform: translate(0, 0) scale(0.5); }
+    20% { opacity:1; }
+    100% { opacity:0; transform: translate(var(--mx), var(--my)) scale(1.2); }
   }
 
   .message{
@@ -274,12 +279,6 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
   }
   .btn:active{transform:scale(.96);}
   .btn:disabled{opacity:.35; box-shadow:none; cursor:not-allowed;}
-  .btn.ghost{
-    background:transparent;
-    border:1.5px solid var(--gold);
-    color:var(--gold-hi);
-    box-shadow:none;
-  }
 
   /* ---------- SCREEN 2: calendar ---------- */
   .title-block{text-align:center; margin-bottom:18px;}
@@ -301,7 +300,6 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
     background:none; border:none; font-size:18px; color:var(--brown); cursor:pointer;
     width:32px; height:32px; border-radius:50%;
   }
-  .cal-head button:hover{background:rgba(90,58,30,.08);}
   .cal-month{font-family:'Playfair Display',serif; font-weight:600; font-size:16px; text-transform:capitalize;}
 
   .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center;}
@@ -323,12 +321,7 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
     gap:8px;
     max-height:180px;
     overflow-y:auto;
-    padding-right:4px;
   }
-  /* Estilização da barra de rolagem dos horários */
-  .time-chips::-webkit-scrollbar { width: 4px; }
-  .time-chips::-webkit-scrollbar-thumb { background: rgba(90,58,30,0.3); border-radius: 4px; }
-
   .chip{
     padding:8px 10px; border-radius:999px; border:1.5px solid rgba(90,58,30,.25);
     font-size:13px; cursor:pointer; background:rgba(255,255,255,.4); color:var(--ink);
@@ -368,7 +361,7 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
     background:radial-gradient(circle at 35% 30%, var(--flower-light), var(--flower-mid) 60%, var(--flower-dark));
     display:flex; align-items:center; justify-content:center;
     font-size:38px;
-    box-shadow:0 10px 24px rgba(234,179,8,.4);
+    box-shadow:0 10px 24px rgba(168,85,247,.4);
     animation:sealPop .7s cubic-bezier(.3,1.6,.4,1) both;
     margin-bottom:6px;
   }
@@ -394,10 +387,6 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
     color:#0b2b1a;
     box-shadow:0 8px 20px rgba(34,184,102,.35);
   }
-
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition:none !important;}
-  }
 </style>
 </head>
 <body>
@@ -420,30 +409,35 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
     <div class="bouquet-wrap">
       <svg viewBox="0 0 320 400">
         <defs>
-          <radialGradient id="sunflowerPetal" cx="50%" cy="100%" r="100%">
+          <radialGradient id="purplePetalGrad" cx="50%" cy="100%" r="90%">
             <stop offset="0%" stop-color="var(--flower-light)"/>
-            <stop offset="70%" stop-color="var(--flower-mid)"/>
+            <stop offset="55%" stop-color="var(--flower-mid)"/>
             <stop offset="100%" stop-color="var(--flower-dark)"/>
           </radialGradient>
-          <radialGradient id="sunflowerCenter" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#140a02"/>
-            <stop offset="75%" stop-color="var(--flower-center)"/>
-            <stop offset="100%" stop-color="#3d2105"/>
+          <radialGradient id="glowCenterGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="40%" stop-color="var(--flower-center)"/>
+            <stop offset="85%" stop-color="var(--flower-mid)"/>
+            <stop offset="100%" stop-color="transparent"/>
           </radialGradient>
+          <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
         </defs>
 
-        <path class="blade" d="M70,400 C68,320 78,260 90,210 C86,270 84,330 84,400 Z" style="animation-delay:.15s"/>
-        <path class="blade" d="M96,400 C98,300 110,230 118,180 C112,250 108,320 110,400 Z" style="animation-delay:.3s"/>
-        <path class="blade" d="M240,400 C238,310 226,245 214,195 C222,260 226,330 224,400 Z" style="animation-delay:.4s"/>
-        <path class="blade" d="M212,400 C216,330 226,275 236,235 C230,290 228,345 226,400 Z" style="animation-delay:.55s"/>
+        <path class="blade" d="M30,400 C20,310 45,230 65,180 C50,260 45,330 45,400 Z" style="animation-delay:.1s"/>
+        <path class="blade" d="M55,400 C45,320 70,250 85,210 C70,280 65,340 65,400 Z" style="animation-delay:.25s"/>
+        <path class="blade" d="M280,400 C290,300 260,220 240,170 C255,250 260,320 260,400 Z" style="animation-delay:.15s"/>
+        <path class="blade" d="M255,400 C265,310 240,240 225,195 C238,270 242,335 242,400 Z" style="animation-delay:.3s"/>
 
-        <path class="stem" d="M128,395 C124,330 132,260 138,175" style="animation-delay:.1s"/>
-        <path class="stem" d="M160,395 C158,320 160,240 160,140" style="animation-delay:.3s"/>
-        <path class="stem" d="M190,395 C194,330 186,260 180,178" style="animation-delay:.5s"/>
+        <path class="stem" d="M125,395 C122,320 134,250 138,180" style="animation-delay:.1s"/>
+        <path class="stem" d="M160,395 C158,310 160,230 160,135" style="animation-delay:.3s"/>
+        <path class="stem" d="M192,395 C195,325 186,255 180,185" style="animation-delay:.4s"/>
 
-        <path class="leaf" d="M136,290 C118,286 106,296 102,310 C120,314 134,306 136,290 Z" style="animation-delay:1.0s"/>
-        <path class="leaf" d="M162,250 C182,244 196,254 200,270 C182,274 166,266 162,250 Z" style="animation-delay:1.15s"/>
-        <path class="leaf" d="M182,300 C200,296 210,306 213,320 C196,323 184,314 182,300 Z" style="animation-delay:1.3s"/>
+        <path class="leaf" d="M132,280 C114,275 104,285 100,298 C118,302 130,294 132,280 Z" style="animation-delay:.9s"/>
+        <path class="leaf" d="M162,240 C182,234 194,242 198,256 C180,262 166,254 162,240 Z" style="animation-delay:1.05s"/>
+        <path class="leaf" d="M184,290 C202,285 212,293 215,306 C198,310 186,302 184,290 Z" style="animation-delay:1.2s"/>
 
         <g id="berryLayer"></g>
 
@@ -501,10 +495,10 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
 
   <section class="screen" id="screen4">
     <button class="back-btn" onclick="goTo(3)">‹</button>
-    <div class="seal">🌻</div>
+    <div class="seal">🔮</div>
     <div class="title-block" style="margin-bottom:4px;">
       <h2>Só falta confirmar</h2>
-      <div class="sub">e te mandar a resposta 💛</div>
+      <div class="sub">e te mandar a resposta 💜</div>
     </div>
 
     <div class="summary" id="summaryBox"></div>
@@ -515,9 +509,6 @@ Substitua todo o conteúdo do seu arquivo por este código atualizado:
 </div>
 
 <script>
-/* =========================================================
-   CONFIGURAÇÃO — troque pelo seu número com DDI+DDD
-========================================================= */
 const WHATSAPP_NUMBER = "5511973513832";
 
 /* ---------------- state ---------------- */
@@ -541,65 +532,64 @@ const state = { date:null, dateLabel:null, time:null, place:null };
   }
 })();
 
-/* ---------------- bouquet: sunflowers + berries ---------------- */
+/* ---------------- bouquet: glowing flowers + magic dust ---------------- */
 const SVGNS = "http://www.w3.org/2000/svg";
 
-/* Gerador de Girassóis com pétalas realistas pontiagudas dispostas em camadas */
-function makeSunflower(cx, cy, scale, baseDelay, rotate){
+/* Cria flores roxas de 5 pétalas arredondadas e sobrepostas com centro brilhante */
+function makeGlowingFlower(cx, cy, scale, baseDelay, rotate){
   const g = document.createElementNS(SVGNS,'g');
   g.setAttribute('transform', `translate(${cx},${cy}) scale(${scale}) rotate(${rotate||0})`);
+  g.setAttribute('filter', 'url(#softGlow)');
 
-  // Duas camadas de pétalas para dar profundidade e volume ao girassol
-  const totalPetals = 24; 
-  for(let i=0; i<totalPetals; i++){
-    const angle = (i * 360) / totalPetals;
+  // 5 Pétalas perfeitamente arredondadas distribuídas radialmente como na imagem
+  const petalAngles = [0, 72, 144, 216, 288];
+  petalAngles.forEach((angle, i) => {
     const p = document.createElementNS(SVGNS,'path');
-    
-    // Formato pontiagudo e elegante característico da pétala de girassol
-    p.setAttribute('d', 'M0,0 C-6,-10 -8,-28 0,-42 C8,-28 6,-10 0,0 Z');
+    // Formato oval/arredondado macio das pétalas da referência
+    p.setAttribute('d', 'M0,0 C-14,-9 -16,-26 0,-34 C16,-26 14,-9 0,0 Z');
     p.setAttribute('class','petal');
-    p.setAttribute('fill','url(#sunflowerPetal)');
-    
-    // Altera sutilmente o tamanho da segunda camada para um efeito natural
-    const layerScale = i % 2 === 0 ? 1 : 0.88;
-    const layerRotate = i % 2 === 0 ? angle : angle + (360 / totalPetals / 2);
-    
-    p.setAttribute('transform', `rotate(${layerRotate}) scale(${layerScale})`);
-    p.style.animationDelay = (baseDelay + (i % 6) * 0.04)+'s';
+    p.setAttribute('fill','url(#purplePetalGrad)');
+    p.setAttribute('transform', `rotate(${angle})`);
+    p.style.animationDelay = (baseDelay + i*0.06)+'s';
     g.appendChild(p);
+  });
+
+  // Centro grande e brilhante (Neon Amarelo/Branco)
+  const glow = document.createElementNS(SVGNS,'circle');
+  glow.setAttribute('cx',0); glow.setAttribute('cy',0); glow.setAttribute('r',9);
+  glow.setAttribute('fill','url(#glowCenterGrad)');
+  glow.setAttribute('class','fcenter');
+  glow.style.animationDelay = (baseDelay + 0.35)+'s';
+  g.appendChild(glow);
+
+  // Geração de partículas de luz neon flutuando acima da flor
+  for(let i=0; i<6; i++){
+    const pt = document.createElementNS(SVGNS,'circle');
+    pt.setAttribute('cx', (Math.random() * 30) - 15);
+    pt.setAttribute('cy', (Math.random() * 20) - 30);
+    pt.setAttribute('r', 1 + Math.random() * 1.5);
+    pt.setAttribute('fill', 'var(--flower-center)');
+    pt.setAttribute('class', 'magic-particle');
+    
+    // Direção aleatória de dispersão da partícula
+    pt.style.setProperty('--mx', ((Math.random() * 40) - 20) + 'px');
+    pt.style.setProperty('--my', (-(40 + Math.random() * 40)) + 'px');
+    pt.style.animationDelay = (baseDelay + 0.5 + (i * 0.2)) + 's';
+    g.appendChild(pt);
   }
 
-  // Miolo grande escuro do girassol
-  const center = document.createElementNS(SVGNS,'circle');
-  center.setAttribute('cx',0); center.setAttribute('cy',0); center.setAttribute('r',14);
-  center.setAttribute('fill','url(#sunflowerCenter)');
-  center.setAttribute('class','fcenter');
-  center.style.animationDelay = (baseDelay + 0.4)+'s';
-  g.appendChild(center);
-
-  // Pequenas texturas/sementes douradas dentro do miolo do girassol
-  for(let i=0; i<12; i++){
-    const d = document.createElementNS(SVGNS,'circle');
-    const a = Math.random()*Math.PI*2, r = Math.random()*10;
-    d.setAttribute('cx', Math.cos(a)*r); d.setAttribute('cy', Math.sin(a)*r);
-    d.setAttribute('r', 0.9);
-    d.setAttribute('fill','var(--gold)');
-    d.setAttribute('class','fcenter');
-    d.style.animationDelay = (baseDelay + 0.5 + Math.random()*0.2)+'s';
-    g.appendChild(d);
-  }
   return g;
 }
 
-/* small round purple berry/leaf clusters near the base */
-function makeBerryCluster(cx, cy, count, baseDelay){
+/* Base de folhagens roxas complementares */
+function makeLeafCluster(cx, cy, count, baseDelay){
   const g = document.createElementNS(SVGNS,'g');
   for(let i=0;i<count;i++){
     const a = Math.random()*Math.PI*2, r = Math.random()*14;
     const c = document.createElementNS(SVGNS,'circle');
     c.setAttribute('cx', cx + Math.cos(a)*r);
     c.setAttribute('cy', cy + Math.sin(a)*r*0.7);
-    c.setAttribute('r', 4 + Math.random()*4);
+    c.setAttribute('r', 5 + Math.random()*4);
     c.setAttribute('fill','var(--berry)');
     c.setAttribute('class','berry');
     c.style.animationDelay = (baseDelay + i*0.05)+'s';
@@ -611,13 +601,13 @@ function makeBerryCluster(cx, cy, count, baseDelay){
 const flowerLayer = document.getElementById('flowerLayer');
 const berryLayer = document.getElementById('berryLayer');
 
-berryLayer.appendChild(makeBerryCluster(110, 360, 8, 1.5));
-berryLayer.appendChild(makeBerryCluster(190, 355, 7, 1.6));
+berryLayer.appendChild(makeLeafCluster(120, 360, 6, 1.4));
+berryLayer.appendChild(makeLeafCluster(185, 355, 6, 1.5));
 
-// Instanciando os girassóis no buquê com tempos de surgimento orgânicos
-flowerLayer.appendChild(makeSunflower(138, 175, 0.95, 1.9, -6));
-flowerLayer.appendChild(makeSunflower(160, 140, 1.15, 2.2, 12));
-flowerLayer.appendChild(makeSunflower(180, 178, 0.90, 2.5, 45));
+// Organização idêntica das 3 flores roxas da imagem enviada
+flowerLayer.appendChild(makeGlowingFlower(132, 180, 1.05, 1.8, -8));
+flowerLayer.appendChild(makeGlowingFlower(160, 135, 1.20, 2.1, 4));
+flowerLayer.appendChild(makeGlowingFlower(184, 185, 0.95, 2.4, 15));
 
 /* ---------------- navigation ---------------- */
 function goTo(step){
@@ -693,11 +683,12 @@ function selectDate(d, el){
 }
 renderCalendar();
 
-/* ---------------- lista expandida de horários de 30 em 30 min ---------------- */
+/* ---------------- time chips ---------------- */
 const times = [
-  "07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30",
-  "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
-  "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00"
+  "08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30",
+  "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
+  "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
+  "20:00","20:30","21:00","21:30","22:00"
 ];
 const chipsWrap = document.getElementById('timeChips');
 times.forEach(t=>{
@@ -749,11 +740,11 @@ function renderSummary(){
   `;
 }
 function sendWhatsapp(){
-  const msg = `🌻 Recebi seu convite especial! 🌻%0A%0A`+
+  const msg = `🔮 Recebi seu convite especial! 🔮%0A%0A`+
     `Data: ${encodeURIComponent(state.dateLabel||'')}%0A`+
     `Horário: ${encodeURIComponent(state.time||'')}%0A`+
     `Local: ${encodeURIComponent((state.place?state.place.icon+' '+state.place.label:''))}%0A%0A`+
-    `Mal posso esperar! 💛`;
+    `Mal posso esperar! 💜`;
   window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
 }
 </script>
