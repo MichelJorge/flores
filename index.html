@@ -1,754 +1,1105 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Um convite especial 🌸</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --navy-deep:#070512;
-    --navy-mid:#0f0b24;
-    --navy-hi:#1a123a;
-    --swirl:#3b1d70;
-    --flower-light:#f3e8ff;
-    --flower-mid:#c084fc;
-    --flower-dark:#7e22ce;
-    --flower-center:#fef08a;
-    --flower-glow:#a855f7;
-    --leaf:#9333ea;
-    --leaf-dark:#4c1d95;
-    --grass-green:#22c55e;
-    --berry:#6b21a8;
-    --cream:#faf3e2;
-    --cream-dim:#efe4c9;
-    --gold:#d9a441;
-    --gold-hi:#f1c876;
-    --ink:#241e0f;
-    --brown:#5a3a1e;
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    font-family:'Poppins',sans-serif;
-    background:var(--navy-deep);
-    color:var(--cream);
-    overflow:hidden;
-    min-height:100vh;
-    min-height:100dvh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Convite Especial — Jardim Secreto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-escuro: #0f291e;
+            --verde-medio: #1b4332;
+            --verde-claro: #2d6a4f;
+            --verde-musgo: #40916c;
+            --dourado: #d4a373;
+            --dourado-claro: #e9c46a;
+            --creme: #faedcd;
+            --rosa-antigo: #fae1dd;
+            --branco: #fefae0;
+        }
 
-  /* ---------- background: starry night ---------- */
-  .sky{
-    position:fixed; inset:0;
-    background:
-      radial-gradient(ellipse at 20% 15%, rgba(59,29,112,.5), transparent 55%),
-      radial-gradient(ellipse at 80% 70%, rgba(26,18,58,.6), transparent 60%),
-      linear-gradient(160deg, var(--navy-deep) 0%, var(--navy-mid) 55%, var(--navy-deep) 100%);
-    overflow:hidden;
-    z-index:0;
-  }
-  .swirl{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(18px);
-    opacity:.3;
-    background:conic-gradient(from 0deg, var(--swirl), transparent 40%, var(--navy-hi) 60%, transparent 90%);
-    animation:swirlRotate 50s linear infinite;
-  }
-  .swirl.s1{width:340px; height:340px; top:-80px; left:-90px; animation-duration:70s;}
-  .swirl.s2{width:260px; height:260px; bottom:-60px; right:-70px; animation-duration:55s; animation-direction:reverse;}
-  .swirl.s3{width:200px; height:200px; top:40%; left:60%; animation-duration:40s;}
-  @keyframes swirlRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  .star{
-    position:absolute;
-    background:#fff7dd;
-    border-radius:50%;
-    animation:twinkle 3.2s ease-in-out infinite;
-  }
-  @keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:1;}}
+        html {
+            scroll-behavior: smooth;
+        }
 
-  /* ---------- app shell ---------- */
-  .app{
-    position:relative;
-    z-index:1;
-    width:100%;
-    max-width:430px;
-    height:100vh;
-    height:100dvh;
-    max-height:900px;
-    display:flex;
-    flex-direction:column;
-    padding:0;
-  }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--verde-escuro);
+            color: var(--creme);
+            overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-  .progress{
-    display:none;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    padding:18px 0 6px;
-    z-index:3;
-  }
-  .progress.show{display:flex;}
-  .dot{width:7px; height:7px; border-radius:50%; background:rgba(250,243,226,.25); transition:all .35s ease;}
-  .dot.active{background:var(--gold-hi); width:20px; border-radius:5px;}
-  .dot.done{background:var(--gold);}
+        /* ========== FUNDO ANIMADO ========== */
+        .bg-garden {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(180deg, #0f291e 0%, #1b4332 40%, #2d6a4f 100%);
+        }
 
-  .back-btn{
-    position:absolute;
-    top:16px; left:14px;
-    z-index:5;
-    background:rgba(250,243,226,.1);
-    border:1px solid rgba(250,243,226,.25);
-    color:var(--cream);
-    width:36px; height:36px;
-    border-radius:50%;
-    font-size:16px;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-  }
-  .screen.active .back-btn{display:flex;}
+        .bg-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(15,41,30,0.6) 100%);
+            pointer-events: none;
+        }
 
-  .screen{
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    flex:1;
-    width:100%;
-    padding:14px 24px 28px;
-    position:relative;
-    overflow-y:auto;
-  }
-  .screen.active{display:flex;}
-  .screen.active > *{animation:fadeUp .7s ease both;}
+        /* ========== PARTÍCULAS / FOLHAS ========== */
+        #leaves-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
 
-  @keyframes fadeUp{
-    0%{opacity:0; transform:translateY(16px);}
-    100%{opacity:1; transform:translateY(0);}
-  }
+        /* ========== ANIMAÇÕES KEYFRAMES ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-  h1,h2{font-family:'Playfair Display',serif; margin:0;}
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-  /* ---------- SCREEN 1: bouquet ---------- */
-  #screen1{justify-content:center; padding-top:0;}
-  .bouquet-wrap{
-    width:100%;
-    max-width:320px;
-    aspect-ratio:4/5;
-    animation:none !important;
-  }
-  .bouquet-wrap svg{width:100%; height:100%; overflow:visible;}
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-  .stem{
-    fill:none;
-    stroke:var(--leaf-dark);
-    stroke-width:3.5;
-    stroke-linecap:round;
-    stroke-dasharray:300;
-    stroke-dashoffset:300;
-    animation:drawStem 1.1s ease forwards;
-  }
-  @keyframes drawStem{to{stroke-dashoffset:0;}}
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
 
-  .blade{
-    fill:var(--grass-green);
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:bottom center;
-    animation:bladeGrow .9s cubic-bezier(.2,.8,.3,1.05) forwards;
-  }
-  @keyframes bladeGrow{
-    0%{opacity:0; transform:scaleY(0) scaleX(.6);}
-    100%{opacity:0.85; transform:scaleY(1) scaleX(1);}
-  }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212,163,115,0.2); }
+            50% { box-shadow: 0 0 40px rgba(212,163,115,0.5); }
+        }
 
-  .leaf{
-    fill:var(--leaf);
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:leafPop .6s ease forwards;
-  }
-  @keyframes leafPop{
-    0%{opacity:0; transform:scale(0) rotate(-14deg);}
-    70%{opacity:1;}
-    100%{opacity:1; transform:scale(1) rotate(0deg);}
-  }
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
 
-  .berry{
-    fill:var(--berry);
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:puffPop .45s ease forwards;
-  }
-  @keyframes puffPop{
-    0%{opacity:0; transform:scale(0);}
-    100%{opacity:1; transform:scale(1);}
-  }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
 
-  .petal{
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:petalPop .6s cubic-bezier(.3,1.4,.5,1) forwards;
-  }
-  @keyframes petalPop{
-    0%{opacity:0; transform:scale(0);}
-    65%{opacity:0.9; transform:scale(1.1);}
-    100%{opacity:0.85; transform:scale(1);}
-  }
-  
-  .fcenter{
-    opacity:0;
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:centerPop .5s ease forwards;
-  }
-  @keyframes centerPop{
-    0%{opacity:0; transform:scale(0); filter:blur(4px);}
-    100%{opacity:1; transform:scale(1); filter:blur(0px);}
-  }
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
-  .magic-particle {
-    opacity:0;
-    animation:floatParticle 2.5s ease-in-out infinite alternate;
-  }
-  @keyframes floatParticle {
-    0% { opacity:0; transform: translate(0, 0) scale(0.5); }
-    20% { opacity:1; }
-    100% { opacity:0; transform: translate(var(--mx), var(--my)) scale(1.2); }
-  }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-  .message{
-    text-align:center;
-    margin-top:6px;
-  }
-  .message .line1{
-    font-family:'Dancing Script',cursive;
-    font-size:clamp(26px,7vw,34px);
-    color:var(--gold-hi);
-    opacity:0;
-    animation:fadeUp .8s ease forwards;
-    animation-delay:2.6s;
-    display:block;
-  }
-  .message .line2{
-    font-family:'Playfair Display',serif;
-    font-style:italic;
-    font-size:clamp(17px,4.6vw,20px);
-    color:var(--cream);
-    opacity:.92;
-    margin-top:6px;
-    opacity:0;
-    animation:fadeUp .8s ease forwards;
-    animation-delay:3.3s;
-    display:block;
-  }
-  .cta{
-    opacity:0;
-    animation:fadeUp .8s ease forwards;
-    animation-delay:4s;
-    margin-top:20px;
-  }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-  /* ---------- buttons ---------- */
-  .btn{
-    font-family:'Poppins',sans-serif;
-    font-weight:500;
-    font-size:15px;
-    letter-spacing:.3px;
-    border:none;
-    border-radius:999px;
-    padding:14px 30px;
-    background:linear-gradient(135deg, var(--gold-hi), var(--gold));
-    color:#2a1c05;
-    cursor:pointer;
-    box-shadow:0 6px 18px rgba(217,164,65,.35);
-    transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;
-  }
-  .btn:active{transform:scale(.96);}
-  .btn:disabled{opacity:.35; box-shadow:none; cursor:not-allowed;}
+        @keyframes countPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
 
-  /* ---------- SCREEN 2: calendar ---------- */
-  .title-block{text-align:center; margin-bottom:18px;}
-  .title-block h2{font-size:clamp(21px,5.5vw,26px); color:var(--cream);}
-  .title-block .sub{font-size:13px; color:var(--gold-hi); font-style:italic; font-family:'Playfair Display',serif; margin-top:4px;}
+        /* ========== UTILITÁRIOS DE ANIMAÇÃO ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-  .card-panel{
-    background:linear-gradient(160deg, var(--cream), var(--cream-dim));
-    color:var(--ink);
-    border-radius:22px;
-    padding:18px 16px;
-    width:100%;
-    max-width:360px;
-    box-shadow:0 14px 30px rgba(0,0,0,.35);
-  }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-  .cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
-  .cal-head button{
-    background:none; border:none; font-size:18px; color:var(--brown); cursor:pointer;
-    width:32px; height:32px; border-radius:50%;
-  }
-  .cal-month{font-family:'Playfair Display',serif; font-weight:600; font-size:16px; text-transform:capitalize;}
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+        .reveal-delay-3 { transition-delay: 0.45s; }
+        .reveal-delay-4 { transition-delay: 0.6s; }
 
-  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center;}
-  .cal-grid .wd{font-size:11px; color:var(--brown); opacity:.6; padding-bottom:4px;}
-  .cal-day{
-    aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-    border-radius:50%; font-size:13px; cursor:pointer; color:var(--ink);
-    transition:all .15s ease;
-  }
-  .cal-day.disabled{opacity:.25; pointer-events:none;}
-  .cal-day.empty{visibility:hidden;}
-  .cal-day:not(.disabled):not(.empty):hover{background:rgba(217,164,65,.25);}
-  .cal-day.selected{background:var(--navy-deep); color:var(--gold-hi); font-weight:600; box-shadow:0 0 0 3px var(--gold);}
+        /* ========== LAYOUT ========== */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
 
-  .time-label{font-size:12.5px; color:var(--brown); margin:16px 0 8px; text-transform:uppercase; letter-spacing:.6px;}
-  .time-chips{
-    display:grid; 
-    grid-template-columns:repeat(3, 1fr); 
-    gap:8px;
-    max-height:180px;
-    overflow-y:auto;
-  }
-  .chip{
-    padding:8px 10px; border-radius:999px; border:1.5px solid rgba(90,58,30,.25);
-    font-size:13px; cursor:pointer; background:rgba(255,255,255,.4); color:var(--ink);
-    text-align:center;
-    transition:all .15s ease;
-  }
-  .chip.selected{background:var(--navy-deep); color:var(--gold-hi); border-color:var(--navy-deep);}
+        section {
+            padding: 60px 0;
+            position: relative;
+        }
 
-  .next-wrap{margin-top:22px; display:flex; justify-content:center;}
+        /* ========== HERO ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 24px;
+            position: relative;
+        }
 
-  /* ---------- SCREEN 3: places ---------- */
-  .places-grid{
-    display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:360px;
-  }
-  .place-card{
-    background:linear-gradient(160deg, rgba(250,243,226,.08), rgba(250,243,226,.03));
-    border:1.5px solid rgba(250,243,226,.18);
-    border-radius:18px;
-    padding:18px 10px;
-    text-align:center;
-    cursor:pointer;
-    transition:all .2s ease;
-  }
-  .place-card:nth-child(5){grid-column:1 / span 2; max-width:170px; margin:0 auto;}
-  .place-card .ic{font-size:30px; display:block; margin-bottom:8px;}
-  .place-card .lb{font-size:13.5px; color:var(--cream);}
-  .place-card.selected{
-    border-color:var(--gold);
-    background:linear-gradient(160deg, rgba(244,185,66,.22), rgba(217,164,65,.08));
-    box-shadow:0 0 0 2px var(--gold);
-    transform:translateY(-2px);
-  }
+        .hero-ornament {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 24px;
+            animation: float 4s ease-in-out infinite, rotate-slow 20s linear infinite;
+            opacity: 0.9;
+        }
 
-  /* ---------- SCREEN 4: confirmation ---------- */
-  .seal{
-    width:88px; height:88px; border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, var(--flower-light), var(--flower-mid) 60%, var(--flower-dark));
-    display:flex; align-items:center; justify-content:center;
-    font-size:38px;
-    box-shadow:0 10px 24px rgba(168,85,247,.4);
-    animation:sealPop .7s cubic-bezier(.3,1.6,.4,1) both;
-    margin-bottom:6px;
-  }
-  @keyframes sealPop{0%{transform:scale(0) rotate(-20deg); opacity:0;}70%{transform:scale(1.1) rotate(6deg);}100%{transform:scale(1) rotate(0); opacity:1;}}
+        .hero-ornament svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px rgba(212,163,115,0.4));
+        }
 
-  .summary{
-    width:100%; max-width:360px;
-    background:linear-gradient(160deg, var(--cream), var(--cream-dim));
-    color:var(--ink);
-    border-radius:20px;
-    padding:20px;
-    margin-top:12px;
-    box-shadow:0 14px 30px rgba(0,0,0,.35);
-  }
-  .summary-row{display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed rgba(90,58,30,.2); font-size:14px;}
-  .summary-row:last-child{border-bottom:none;}
-  .summary-row .k{color:var(--brown); opacity:.75;}
-  .summary-row .v{font-weight:600; text-align:right;}
+        .hero-pretitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin-bottom: 16px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
 
-  .wa-btn{
-    margin-top:22px;
-    background:linear-gradient(135deg,#38d97f,#22b866);
-    color:#0b2b1a;
-    box-shadow:0 8px 20px rgba(34,184,102,.35);
-  }
-</style>
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 300;
+            line-height: 1.1;
+            color: var(--branco);
+            margin-bottom: 8px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .hero-title span {
+            display: block;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--dourado-claro);
+        }
+
+        .hero-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--rosa-antigo);
+            margin-bottom: 32px;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: fadeIn 1s ease-out 1.5s both, float 2s ease-in-out infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--dourado);
+            opacity: 0.7;
+        }
+
+        /* ========== DIVISÓRIAS ========== */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 0;
+            opacity: 0.5;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+        }
+
+        .divider-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--dourado);
+        }
+
+        /* ========== SEÇÃO DETALHES ========== */
+        .details-card {
+            background: rgba(27, 67, 50, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 163, 115, 0.2);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .details-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(212, 163, 115, 0.03) 50%,
+                transparent 70%
+            );
+            animation: shimmer 6s infinite linear;
+            pointer-events: none;
+        }
+
+        .detail-item {
+            margin-bottom: 28px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            width: 44px;
+            height: 44px;
+            margin: 0 auto 12px;
+            background: rgba(212, 163, 115, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dourado);
+        }
+
+        .detail-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .detail-label {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin-bottom: 6px;
+        }
+
+        .detail-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--branco);
+            line-height: 1.3;
+        }
+
+        /* ========== CONTAGEM REGRESSIVA ========== */
+        .countdown-section {
+            text-align: center;
+        }
+
+        .countdown-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 8px;
+            color: var(--branco);
+        }
+
+        .countdown-sub {
+            font-size: 0.8rem;
+            color: var(--dourado);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .countdown-box {
+            background: rgba(15, 41, 30, 0.6);
+            border: 1px solid rgba(212, 163, 115, 0.25);
+            border-radius: 16px;
+            padding: 16px 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+            opacity: 0.6;
+        }
+
+        .countdown-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--dourado-claro);
+            line-height: 1;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .countdown-number.pop {
+            animation: countPop 0.4s ease;
+        }
+
+        .countdown-label {
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--rosa-antigo);
+            margin-top: 6px;
+            opacity: 0.8;
+        }
+
+        .countdown-message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--dourado);
+            margin-top: 20px;
+            min-height: 28px;
+        }
+
+        /* ========== BOTÕES ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 18px 28px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--dourado), #bc8a5f);
+            color: var(--verde-escuro);
+            box-shadow: 0 4px 20px rgba(212, 163, 115, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 163, 115, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.25);
+            margin-top: 12px;
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--dourado);
+            color: var(--dourado);
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 163, 115, 0.1);
+        }
+
+        /* ========== SEÇÃO CONFIRMAÇÃO ========== */
+        .confirm-section {
+            text-align: center;
+        }
+
+        .confirm-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: var(--rosa-antigo);
+            margin-bottom: 28px;
+        }
+
+        .confirm-highlight {
+            color: var(--dourado-claro);
+            font-weight: 600;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 41, 30, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(180deg, #1b4332, #0f291e);
+            border: 1px solid rgba(212, 163, 115, 0.3);
+            border-radius: 32px 32px 0 0;
+            width: 100%;
+            max-width: 480px;
+            padding: 32px 28px 40px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: var(--branco);
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 0.8rem;
+            color: var(--dourado);
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 163, 115, 0.25);
+            border-radius: 14px;
+            color: var(--branco);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--dourado);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.15);
+        }
+
+        .form-input::placeholder {
+            color: rgba(250, 237, 205, 0.4);
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+
+        .form-select option {
+            background: var(--verde-escuro);
+            color: var(--branco);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.08);
+            border: none;
+            border-radius: 50%;
+            color: var(--creme);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.15);
+            transform: rotate(90deg);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            text-align: center;
+            padding: 40px 24px 60px;
+            opacity: 0.5;
+        }
+
+        .footer-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--dourado);
+        }
+
+        /* ========== VINES DECORATIVAS ========== */
+        .vine {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .vine-left {
+            left: -20px;
+            top: 10%;
+            width: 80px;
+        }
+
+        .vine-right {
+            right: -20px;
+            top: 40%;
+            width: 80px;
+            transform: scaleX(-1);
+        }
+
+        /* ========== RESPONSIVO EXTRA ========== */
+        @media (max-width: 360px) {
+            .hero-title { font-size: 2.6rem; }
+            .countdown-number { font-size: 1.6rem; }
+            .countdown-grid { gap: 6px; }
+        }
+    </style>
+<base target="_blank">
 </head>
 <body>
 
-<div class="sky" id="sky">
-  <div class="swirl s1"></div>
-  <div class="swirl s2"></div>
-  <div class="swirl s3"></div>
-</div>
+    <!-- Fundos -->
+    <div class="bg-garden"></div>
+    <div class="bg-vignette"></div>
+    <canvas id="leaves-canvas"></canvas>
 
-<div class="app">
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-ornament">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="#d4a373" stroke-width="0.5" opacity="0.4"/>
+                <circle cx="50" cy="50" r="35" stroke="#d4a373" stroke-width="0.5" opacity="0.3"/>
+                <path d="M50 15 C30 15, 15 30, 15 50 C15 70, 30 85, 50 85 C70 85, 85 70, 85 50 C85 30, 70 15, 50 15Z" stroke="#d4a373" stroke-width="0.5" fill="none" opacity="0.5"/>
+                <path d="M50 25 Q35 35 35 50 Q35 65 50 75 Q65 65 65 50 Q65 35 50 25" fill="#d4a373" opacity="0.15"/>
+                <path d="M50 5 L50 15 M50 85 L50 95 M5 50 L15 50 M85 50 L95 50" stroke="#d4a373" stroke-width="0.5" opacity="0.3"/>
+                <circle cx="50" cy="50" r="3" fill="#d4a373" opacity="0.6"/>
+                <path d="M50 50 Q45 30 25 25 Q45 35 50 50" fill="#40916c" opacity="0.4"/>
+                <path d="M50 50 Q55 30 75 25 Q55 35 50 50" fill="#40916c" opacity="0.4"/>
+                <path d="M50 50 Q45 70 25 75 Q45 65 50 50" fill="#40916c" opacity="0.4"/>
+                <path d="M50 50 Q55 70 75 75 Q55 65 50 50" fill="#40916c" opacity="0.4"/>
+            </svg>
+        </div>
+        <p class="hero-pretitle">Você está convidado</p>
+        <h1 class="hero-title">
+            Jardim
+            <span>Secreto</span>
+        </h1>
+        <p class="hero-subtitle">Uma noite de encanto e celebração</p>
+        <div class="divider" style="animation: fadeIn 1s ease-out 1.2s both;">
+            <div class="divider-line"></div>
+            <svg class="divider-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            <div class="divider-line"></div>
+        </div>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+            </svg>
+        </div>
+    </section>
 
-  <div class="progress" id="progress">
-    <div class="dot" data-step="2"></div>
-    <div class="dot" data-step="3"></div>
-    <div class="dot" data-step="4"></div>
-  </div>
+    <div class="container">
+        <!-- DETALHES -->
+        <section>
+            <div class="details-card reveal">
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2"/>
+                            <path d="M16 2v4M8 2v4M3 10h18"/>
+                        </svg>
+                    </div>
+                    <div class="detail-label">Data</div>
+                    <div class="detail-value">19 de Setembro</div>
+                </div>
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <svg class="divider-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
+                    <div class="divider-line"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <div class="detail-label">Horário</div>
+                    <div class="detail-value">18:00</div>
+                </div>
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <svg class="divider-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
+                    <div class="divider-line"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="detail-label">Local</div>
+                    <div class="detail-value">Rua das Flores, 123<br><small style="font-size:0.9rem;opacity:0.7;">Jardim Botânico</small></div>
+                </div>
+            </div>
+        </section>
 
-  <section class="screen active" id="screen1">
-    <div class="bouquet-wrap">
-      <svg viewBox="0 0 320 400">
-        <defs>
-          <radialGradient id="purplePetalGrad" cx="50%" cy="100%" r="90%">
-            <stop offset="0%" stop-color="var(--flower-light)"/>
-            <stop offset="55%" stop-color="var(--flower-mid)"/>
-            <stop offset="100%" stop-color="var(--flower-dark)"/>
-          </radialGradient>
-          <radialGradient id="glowCenterGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#ffffff"/>
-            <stop offset="40%" stop-color="var(--flower-center)"/>
-            <stop offset="85%" stop-color="var(--flower-mid)"/>
-            <stop offset="100%" stop-color="transparent"/>
-          </radialGradient>
-          <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
+        <!-- CONTAGEM REGRESSIVA -->
+        <section class="countdown-section reveal">
+            <h2 class="countdown-title">A Magia Começa Em</h2>
+            <p class="countdown-sub">Contagem regressiva</p>
+            <div class="countdown-grid">
+                <div class="countdown-box">
+                    <span class="countdown-number" id="days">00</span>
+                    <div class="countdown-label">Dias</div>
+                </div>
+                <div class="countdown-box">
+                    <span class="countdown-number" id="hours">00</span>
+                    <div class="countdown-label">Horas</div>
+                </div>
+                <div class="countdown-box">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <div class="countdown-label">Min</div>
+                </div>
+                <div class="countdown-box">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <div class="countdown-label">Seg</div>
+                </div>
+            </div>
+            <p class="countdown-message" id="countdown-msg">Preparando o jardim...</p>
+        </section>
 
-        <path class="blade" d="M30,400 C20,310 45,230 65,180 C50,260 45,330 45,400 Z" style="animation-delay:.1s"/>
-        <path class="blade" d="M55,400 C45,320 70,250 85,210 C70,280 65,340 65,400 Z" style="animation-delay:.25s"/>
-        <path class="blade" d="M280,400 C290,300 260,220 240,170 C255,250 260,320 260,400 Z" style="animation-delay:.15s"/>
-        <path class="blade" d="M255,400 C265,310 240,240 225,195 C238,270 242,335 242,400 Z" style="animation-delay:.3s"/>
+        <!-- CONFIRMAÇÃO -->
+        <section class="confirm-section reveal">
+            <div class="divider">
+                <div class="divider-line"></div>
+                <svg class="divider-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <div class="divider-line"></div>
+            </div>
+            <p class="confirm-text">
+                Sua presença será a flor mais rara do nosso<br>
+                <span class="confirm-highlight">Jardim Secreto</span>.
+                Confirme sua presença e faça parte deste momento inesquecível.
+            </p>
+            <button class="btn btn-primary" onclick="openModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <path d="M20 6L9 17l-5-5"/>
+                </svg>
+                Confirmar Presença
+            </button>
+            <a href="#" class="btn btn-whatsapp" id="btn-wa-direct" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Confirmar pelo WhatsApp
+            </a>
+        </section>
 
-        <path class="stem" d="M125,395 C122,320 134,250 138,180" style="animation-delay:.1s"/>
-        <path class="stem" d="M160,395 C158,310 160,230 160,135" style="animation-delay:.3s"/>
-        <path class="stem" d="M192,395 C195,325 186,255 180,185" style="animation-delay:.4s"/>
-
-        <path class="leaf" d="M132,280 C114,275 104,285 100,298 C118,302 130,294 132,280 Z" style="animation-delay:.9s"/>
-        <path class="leaf" d="M162,240 C182,234 194,242 198,256 C180,262 166,254 162,240 Z" style="animation-delay:1.05s"/>
-        <path class="leaf" d="M184,290 C202,285 212,293 215,306 C198,310 186,302 184,290 Z" style="animation-delay:1.2s"/>
-
-        <g id="berryLayer"></g>
-
-        <g id="flowerLayer"></g>
-      </svg>
+        <!-- FOOTER -->
+        <footer class="footer reveal">
+            <p class="footer-text">"Onde florescem flores, floresce a esperança"</p>
+            <p style="font-size:0.7rem; margin-top:8px; letter-spacing:2px; text-transform:uppercase;">Jardim Secreto • 2026</p>
+        </footer>
     </div>
 
-    <div class="message">
-      <span class="line1">Espero muito te encontrar…</span>
-      <span class="line2">mas quando e onde?</span>
+    <!-- MODAL DE CONFIRMAÇÃO -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content" style="position:relative;">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Presença</h3>
+                <p class="modal-subtitle">Preencha seus dados abaixo</p>
+            </div>
+            <form id="confirmForm" onsubmit="handleConfirm(event)">
+                <div class="form-group">
+                    <label class="form-label">Seu Nome</label>
+                    <input type="text" class="form-input" id="guestName" placeholder="Digite seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Você irá?</label>
+                    <select class="form-select" id="guestResponse" required>
+                        <option value="" disabled selected>Selecione uma opção</option>
+                        <option value="Sim, confirmo minha presença!">Sim, vou com certeza!</option>
+                        <option value="Talvez, ainda não tenho certeza.">Talvez, ainda não tenho certeza</option>
+                        <option value="Infelizmente não poderei ir.">Infelizmente não poderei ir</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Acompanhantes</label>
+                    <select class="form-select" id="guestCount">
+                        <option value="0">Só eu</option>
+                        <option value="1">+1 acompanhante</option>
+                        <option value="2">+2 acompanhantes</option>
+                        <option value="3">+3 acompanhantes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Observação (opcional)</label>
+                    <input type="text" class="form-input" id="guestNote" placeholder="Alguma restrição alimentar?">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <path d="M20 6L9 17l-5-5"/>
+                        </svg>
+                        Enviar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="cta">
-      <button class="btn" onclick="goTo(2)">Vamos combinar 💫</button>
-    </div>
-  </section>
+    <script>
+        /* =========================================================
+           CONFIGURAÇÕES — ALTERE AQUI SEU NÚMERO DE WHATSAPP
+           ========================================================= */
+        const WHATSAPP_NUMBER = "5511999999999"; // <-- SUBSTITUA PELO SEU NÚMERO COM DDD (ex: 5511987654321)
+        const EVENT_DATE = new Date("2026-09-19T18:00:00").getTime();
+        const EVENT_NAME = "Jardim Secreto";
 
-  <section class="screen" id="screen2">
-    <button class="back-btn" onclick="goTo(1)">‹</button>
-    <div class="title-block">
-      <h2>Quando podemos nos ver?</h2>
-      <div class="sub">escolha o dia e o horário</div>
-    </div>
+        /* =========================================================
+           CONTAGEM REGRESSIVA ANIMADA
+           ========================================================= */
+        const els = {
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours'),
+            minutes: document.getElementById('minutes'),
+            seconds: document.getElementById('seconds'),
+            msg: document.getElementById('countdown-msg')
+        };
 
-    <div class="card-panel">
-      <div class="cal-head">
-        <button onclick="changeMonth(-1)">‹</button>
-        <div class="cal-month" id="calMonth"></div>
-        <button onclick="changeMonth(1)">›</button>
-      </div>
-      <div class="cal-grid" id="calGrid"></div>
+        let prevValues = { d: null, h: null, m: null, s: null };
 
-      <div class="time-label">Horário</div>
-      <div class="time-chips" id="timeChips"></div>
-    </div>
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = EVENT_DATE - now;
 
-    <div class="next-wrap">
-      <button class="btn" id="btnToStep3" disabled onclick="goTo(3)">Continuar</button>
-    </div>
-  </section>
+            if (distance < 0) {
+                els.days.textContent = '00';
+                els.hours.textContent = '00';
+                els.minutes.textContent = '00';
+                els.seconds.textContent = '00';
+                els.msg.textContent = 'O grande dia chegou! 🌿✨';
+                return;
+            }
 
-  <section class="screen" id="screen3">
-    <button class="back-btn" onclick="goTo(2)">‹</button>
-    <div class="title-block">
-      <h2>Para onde vamos?</h2>
-      <div class="sub">escolha o cenário do nosso encontro</div>
-    </div>
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
 
-    <div class="places-grid" id="placesGrid"></div>
+            const pad = (n) => String(n).padStart(2, '0');
 
-    <div class="next-wrap">
-      <button class="btn" id="btnToStep4" disabled onclick="goTo(4)">Continuar</button>
-    </div>
-  </section>
+            [['d', d, els.days], ['h', h, els.hours], ['m', m, els.minutes], ['s', s, els.seconds]].forEach(([key, val, el]) => {
+                const str = pad(val);
+                if (prevValues[key] !== str) {
+                    el.textContent = str;
+                    el.classList.remove('pop');
+                    void el.offsetWidth; // reflow
+                    el.classList.add('pop');
+                    prevValues[key] = str;
+                }
+            });
 
-  <section class="screen" id="screen4">
-    <button class="back-btn" onclick="goTo(3)">‹</button>
-    <div class="seal">🔮</div>
-    <div class="title-block" style="margin-bottom:4px;">
-      <h2>Só falta confirmar</h2>
-      <div class="sub">e te mandar a resposta 💜</div>
-    </div>
+            if (d === 0 && h === 0 && m === 0) {
+                els.msg.textContent = 'Faltam poucos segundos...';
+            } else if (d === 0 && h === 0) {
+                els.msg.textContent = 'Está quase na hora!';
+            } else if (d === 0) {
+                els.msg.textContent = 'O dia chegou! Prepare-se...';
+            } else if (d === 1) {
+                els.msg.textContent = 'Amanhã é o grande dia!';
+            } else {
+                els.msg.textContent = 'O jardim se prepara para te receber...';
+            }
+        }
 
-    <div class="summary" id="summaryBox"></div>
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
 
-    <button class="btn wa-btn" onclick="sendWhatsapp()">Enviar no WhatsApp 💌</button>
-  </section>
+        /* =========================================================
+           SCROLL REVEAL (INTERSECTION OBSERVER)
+           ========================================================= */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
 
-</div>
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-<script>
-const WHATSAPP_NUMBER = "5511973513832";
+        /* =========================================================
+           MODAL
+           ========================================================= */
+        const modal = document.getElementById('modal');
 
-/* ---------------- state ---------------- */
-const state = { date:null, dateLabel:null, time:null, place:null };
+        function openModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('guestName').focus(), 300);
+        }
 
-/* ---------------- background stars ---------------- */
-(function makeStars(){
-  const sky = document.getElementById('sky');
-  const n = 55;
-  for(let i=0;i<n;i++){
-    const s = document.createElement('div');
-    s.className='star';
-    const size = Math.random()*2 + 1;
-    s.style.width = size+'px';
-    s.style.height = size+'px';
-    s.style.left = Math.random()*100+'%';
-    s.style.top = Math.random()*100+'%';
-    s.style.animationDelay = (Math.random()*3.2)+'s';
-    s.style.animationDuration = (2.4+Math.random()*2.4)+'s';
-    sky.appendChild(s);
-  }
-})();
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
 
-/* ---------------- bouquet: glowing flowers + magic dust ---------------- */
-const SVGNS = "http://www.w3.org/2000/svg";
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
 
-/* Cria flores roxas de 5 pétalas arredondadas e sobrepostas com centro brilhante */
-function makeGlowingFlower(cx, cy, scale, baseDelay, rotate){
-  const g = document.createElementNS(SVGNS,'g');
-  g.setAttribute('transform', `translate(${cx},${cy}) scale(${scale}) rotate(${rotate||0})`);
-  g.setAttribute('filter', 'url(#softGlow)');
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+        });
 
-  // 5 Pétalas perfeitamente arredondadas distribuídas radialmente como na imagem
-  const petalAngles = [0, 72, 144, 216, 288];
-  petalAngles.forEach((angle, i) => {
-    const p = document.createElementNS(SVGNS,'path');
-    // Formato oval/arredondado macio das pétalas da referência
-    p.setAttribute('d', 'M0,0 C-14,-9 -16,-26 0,-34 C16,-26 14,-9 0,0 Z');
-    p.setAttribute('class','petal');
-    p.setAttribute('fill','url(#purplePetalGrad)');
-    p.setAttribute('transform', `rotate(${angle})`);
-    p.style.animationDelay = (baseDelay + i*0.06)+'s';
-    g.appendChild(p);
-  });
+        /* =========================================================
+           ENVIO DA CONFIRMAÇÃO VIA WHATSAPP
+           ========================================================= */
+        function handleConfirm(e) {
+            e.preventDefault();
+            const name = document.getElementById('guestName').value.trim();
+            const response = document.getElementById('guestResponse').value;
+            const count = document.getElementById('guestCount').value;
+            const note = document.getElementById('guestNote').value.trim();
 
-  // Centro grande e brilhante (Neon Amarelo/Branco)
-  const glow = document.createElementNS(SVGNS,'circle');
-  glow.setAttribute('cx',0); glow.setAttribute('cy',0); glow.setAttribute('r',9);
-  glow.setAttribute('fill','url(#glowCenterGrad)');
-  glow.setAttribute('class','fcenter');
-  glow.style.animationDelay = (baseDelay + 0.35)+'s';
-  g.appendChild(glow);
+            let message = `🌿 *Confirmação de Presença — ${EVENT_NAME}* 🌿
 
-  // Geração de partículas de luz neon flutuando acima da flor
-  for(let i=0; i<6; i++){
-    const pt = document.createElementNS(SVGNS,'circle');
-    pt.setAttribute('cx', (Math.random() * 30) - 15);
-    pt.setAttribute('cy', (Math.random() * 20) - 30);
-    pt.setAttribute('r', 1 + Math.random() * 1.5);
-    pt.setAttribute('fill', 'var(--flower-center)');
-    pt.setAttribute('class', 'magic-particle');
-    
-    // Direção aleatória de dispersão da partícula
-    pt.style.setProperty('--mx', ((Math.random() * 40) - 20) + 'px');
-    pt.style.setProperty('--my', (-(40 + Math.random() * 40)) + 'px');
-    pt.style.animationDelay = (baseDelay + 0.5 + (i * 0.2)) + 's';
-    g.appendChild(pt);
-  }
+`;
+            message += `👤 *Nome:* ${name}
+`;
+            message += `✅ *Resposta:* ${response}
+`;
+            message += `👥 *Acompanhantes:* ${count === '0' ? 'Nenhum' : count}
+`;
+            if (note) message += `📝 *Observação:* ${note}
+`;
+            message += `
+_Enviado pelo convite digital_`;
 
-  return g;
-}
+            const encoded = encodeURIComponent(message);
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 
-/* Base de folhagens roxas complementares */
-function makeLeafCluster(cx, cy, count, baseDelay){
-  const g = document.createElementNS(SVGNS,'g');
-  for(let i=0;i<count;i++){
-    const a = Math.random()*Math.PI*2, r = Math.random()*14;
-    const c = document.createElementNS(SVGNS,'circle');
-    c.setAttribute('cx', cx + Math.cos(a)*r);
-    c.setAttribute('cy', cy + Math.sin(a)*r*0.7);
-    c.setAttribute('r', 5 + Math.random()*4);
-    c.setAttribute('fill','var(--berry)');
-    c.setAttribute('class','berry');
-    c.style.animationDelay = (baseDelay + i*0.05)+'s';
-    g.appendChild(c);
-  }
-  return g;
-}
+            window.open(waUrl, '_blank');
+            closeModal();
 
-const flowerLayer = document.getElementById('flowerLayer');
-const berryLayer = document.getElementById('berryLayer');
+            // Feedback visual temporário
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Enviado!';
+            setTimeout(() => btn.innerHTML = originalText, 3000);
+        }
 
-berryLayer.appendChild(makeLeafCluster(120, 360, 6, 1.4));
-berryLayer.appendChild(makeLeafCluster(185, 355, 6, 1.5));
+        // Botão direto do WhatsApp (sem formulário)
+        document.getElementById('btn-wa-direct').addEventListener('click', function(e) {
+            e.preventDefault();
+            const msg = encodeURIComponent(`Olá! Gostaria de confirmar minha presença no aniversário *${EVENT_NAME}* 🌿`);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+        });
 
-// Organização idêntica das 3 flores roxas da imagem enviada
-flowerLayer.appendChild(makeGlowingFlower(132, 180, 1.05, 1.8, -8));
-flowerLayer.appendChild(makeGlowingFlower(160, 135, 1.20, 2.1, 4));
-flowerLayer.appendChild(makeGlowingFlower(184, 185, 0.95, 2.4, 15));
+        /* =========================================================
+           PARTÍCULAS DE FOLHAS (CANVAS)
+           ========================================================= */
+        const canvas = document.getElementById('leaves-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        const leaves = [];
+        const leafColors = ['rgba(64, 145, 108, 0.3)', 'rgba(45, 106, 79, 0.25)', 'rgba(212, 163, 115, 0.15)', 'rgba(233, 196, 106, 0.1)'];
 
-/* ---------------- navigation ---------------- */
-function goTo(step){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen'+step).classList.add('active');
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
 
-  const prog = document.getElementById('progress');
-  if(step >= 2){
-    prog.classList.add('show');
-    document.querySelectorAll('.dot').forEach(d=>{
-      const ds = parseInt(d.dataset.step);
-      d.classList.toggle('active', ds===step);
-      d.classList.toggle('done', ds<step);
-    });
-  } else {
-    prog.classList.remove('show');
-  }
-  if(step===4) renderSummary();
-}
+        class Leaf {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -20;
+                this.size = Math.random() * 6 + 3;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.speedX = Math.random() * 0.6 - 0.3;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 1.5 - 0.75;
+                this.color = leafColors[Math.floor(Math.random() * leafColors.length)];
+                this.opacity = Math.random() * 0.4 + 0.1;
+                this.sway = Math.random() * 0.02 + 0.01;
+                this.swayOffset = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(this.y * this.sway + this.swayOffset) * 0.5;
+                this.rotation += this.rotationSpeed;
+                if (this.y > height + 20) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
 
-/* ---------------- calendar ---------------- */
-const monthNames = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
-const weekDays = ["D","S","T","Q","Q","S","S"];
-let viewDate = new Date();
-viewDate.setDate(1);
-const today = new Date(); today.setHours(0,0,0,0);
+        for (let i = 0; i < 35; i++) {
+            const leaf = new Leaf();
+            leaf.y = Math.random() * height; // distribuir inicialmente
+            leaves.push(leaf);
+        }
 
-function renderCalendar(){
-  document.getElementById('calMonth').textContent = monthNames[viewDate.getMonth()] + " " + viewDate.getFullYear();
-  const grid = document.getElementById('calGrid');
-  grid.innerHTML = '';
-  weekDays.forEach(w=>{
-    const el = document.createElement('div');
-    el.className='wd'; el.textContent=w;
-    grid.appendChild(el);
-  });
-  const firstDay = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1).getDay();
-  const daysInMonth = new Date(viewDate.getFullYear(), viewDate.getMonth()+1, 0).getDate();
+        function animateLeaves() {
+            ctx.clearRect(0, 0, width, height);
+            leaves.forEach(leaf => {
+                leaf.update();
+                leaf.draw();
+            });
+            requestAnimationFrame(animateLeaves);
+        }
+        animateLeaves();
 
-  for(let i=0;i<firstDay;i++){
-    const el = document.createElement('div');
-    el.className='cal-day empty';
-    grid.appendChild(el);
-  }
-  for(let d=1; d<=daysInMonth; d++){
-    const el = document.createElement('div');
-    el.className='cal-day';
-    el.textContent = d;
-    const thisDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), d);
-    thisDate.setHours(0,0,0,0);
-    if(thisDate < today){
-      el.classList.add('disabled');
-    } else {
-      el.onclick = ()=> selectDate(thisDate, el);
-    }
-    if(state.date && thisDate.getTime()===state.date.getTime()){
-      el.classList.add('selected');
-    }
-    grid.appendChild(el);
-  }
-}
-function changeMonth(delta){
-  viewDate.setMonth(viewDate.getMonth()+delta);
-  renderCalendar();
-}
-function selectDate(d, el){
-  document.querySelectorAll('.cal-day.selected').forEach(x=>x.classList.remove('selected'));
-  el.classList.add('selected');
-  state.date = d;
-  const wd = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"][d.getDay()];
-  state.dateLabel = `${wd}, ${d.getDate()} de ${monthNames[d.getMonth()]}`;
-  checkStep2();
-}
-renderCalendar();
-
-/* ---------------- time chips ---------------- */
-const times = [
-  "08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30",
-  "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
-  "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
-  "20:00","20:30","21:00","21:30","22:00"
-];
-const chipsWrap = document.getElementById('timeChips');
-times.forEach(t=>{
-  const c = document.createElement('div');
-  c.className='chip'; c.textContent=t;
-  c.onclick = ()=> selectTime(t, c);
-  chipsWrap.appendChild(c);
-});
-
-function selectTime(t, el){
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  state.time = t;
-  checkStep2();
-}
-function checkStep2(){
-  document.getElementById('btnToStep3').disabled = !(state.date && state.time);
-}
-
-/* ---------------- places ---------------- */
-const places = [
-  {icon:'🖼️', label:'Museu'},
-  {icon:'🎭', label:'Teatro'},
-  {icon:'🎬', label:'Cinema'},
-  {icon:'🌇', label:'Pôr do sol'},
-  {icon:'🌅', label:'Nascer do sol'}
-];
-const placesGrid = document.getElementById('placesGrid');
-places.forEach(p=>{
-  const el = document.createElement('div');
-  el.className='place-card';
-  el.innerHTML = `<span class="ic">${p.icon}</span><span class="lb">${p.label}</span>`;
-  el.onclick = ()=>{
-    document.querySelectorAll('.place-card').forEach(c=>c.classList.remove('selected'));
-    el.classList.add('selected');
-    state.place = p;
-    document.getElementById('btnToStep4').disabled = false;
-  };
-  placesGrid.appendChild(el);
-});
-
-/* ---------------- confirmation ---------------- */
-function renderSummary(){
-  const box = document.getElementById('summaryBox');
-  box.innerHTML = `
-    <div class="summary-row"><span class="k">Data</span><span class="v">${state.dateLabel || '-'}</span></div>
-    <div class="summary-row"><span class="k">Horário</span><span class="v">${state.time || '-'}</span></div>
-    <div class="summary-row"><span class="k">Local</span><span class="v">${state.place ? state.place.icon+' '+state.place.label : '-'}</span></div>
-  `;
-}
-function sendWhatsapp(){
-  const msg = `🔮 Recebi seu convite especial! 🔮%0A%0A`+
-    `Data: ${encodeURIComponent(state.dateLabel||'')}%0A`+
-    `Horário: ${encodeURIComponent(state.time||'')}%0A`+
-    `Local: ${encodeURIComponent((state.place?state.place.icon+' '+state.place.label:''))}%0A%0A`+
-    `Mal posso esperar! 💜`;
-  window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-}
-</script>
+        /* =========================================================
+           PARALLAX SUAVE NO SCROLL
+           ========================================================= */
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const parallax = document.querySelector('.hero-ornament');
+                    if (parallax) {
+                        parallax.style.transform = `translateY(${scrolled * 0.15}px) rotate(${scrolled * 0.05}deg)`;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+    </script>
 </body>
 </html>
-
-```
