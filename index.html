@@ -1,1105 +1,694 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Convite Especial — Jardim Secreto</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --verde-escuro: #0f291e;
-            --verde-medio: #1b4332;
-            --verde-claro: #2d6a4f;
-            --verde-musgo: #40916c;
-            --dourado: #d4a373;
-            --dourado-claro: #e9c46a;
-            --creme: #faedcd;
-            --rosa-antigo: #fae1dd;
-            --branco: #fefae0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--verde-escuro);
-            color: var(--creme);
-            overflow-x: hidden;
-            min-height: 100vh;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* ========== FUNDO ANIMADO ========== */
-        .bg-garden {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: linear-gradient(180deg, #0f291e 0%, #1b4332 40%, #2d6a4f 100%);
-        }
-
-        .bg-vignette {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(ellipse at center, transparent 0%, rgba(15,41,30,0.6) 100%);
-            pointer-events: none;
-        }
-
-        /* ========== PARTÍCULAS / FOLHAS ========== */
-        #leaves-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* ========== ANIMAÇÕES KEYFRAMES ========== */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(212,163,115,0.2); }
-            50% { box-shadow: 0 0 40px rgba(212,163,115,0.5); }
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 0.6; }
-            100% { transform: scale(1.5); opacity: 0; }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-
-        @keyframes rotate-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-60px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes countPop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-
-        /* ========== UTILITÁRIOS DE ANIMAÇÃO ========== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 { transition-delay: 0.15s; }
-        .reveal-delay-2 { transition-delay: 0.3s; }
-        .reveal-delay-3 { transition-delay: 0.45s; }
-        .reveal-delay-4 { transition-delay: 0.6s; }
-
-        /* ========== LAYOUT ========== */
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 0 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        section {
-            padding: 60px 0;
-            position: relative;
-        }
-
-        /* ========== HERO ========== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px 24px;
-            position: relative;
-        }
-
-        .hero-ornament {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 24px;
-            animation: float 4s ease-in-out infinite, rotate-slow 20s linear infinite;
-            opacity: 0.9;
-        }
-
-        .hero-ornament svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 15px rgba(212,163,115,0.4));
-        }
-
-        .hero-pretitle {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--dourado);
-            margin-bottom: 16px;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
-
-        .hero-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3.2rem;
-            font-weight: 300;
-            line-height: 1.1;
-            color: var(--branco);
-            margin-bottom: 8px;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        .hero-title span {
-            display: block;
-            font-style: italic;
-            font-weight: 400;
-            color: var(--dourado-claro);
-        }
-
-        .hero-subtitle {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-weight: 300;
-            color: var(--rosa-antigo);
-            margin-bottom: 32px;
-            animation: fadeInUp 1s ease-out 0.9s both;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: fadeIn 1s ease-out 1.5s both, float 2s ease-in-out infinite;
-        }
-
-        .scroll-indicator svg {
-            width: 28px;
-            height: 28px;
-            stroke: var(--dourado);
-            opacity: 0.7;
-        }
-
-        /* ========== DIVISÓRIAS ========== */
-        .divider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin: 20px 0;
-            opacity: 0.5;
-        }
-
-        .divider-line {
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
-        }
-
-        .divider-icon {
-            width: 20px;
-            height: 20px;
-            color: var(--dourado);
-        }
-
-        /* ========== SEÇÃO DETALHES ========== */
-        .details-card {
-            background: rgba(27, 67, 50, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 163, 115, 0.2);
-            border-radius: 24px;
-            padding: 32px 24px;
-            text-align: center;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .details-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(212, 163, 115, 0.03) 50%,
-                transparent 70%
-            );
-            animation: shimmer 6s infinite linear;
-            pointer-events: none;
-        }
-
-        .detail-item {
-            margin-bottom: 28px;
-        }
-
-        .detail-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .detail-icon {
-            width: 44px;
-            height: 44px;
-            margin: 0 auto 12px;
-            background: rgba(212, 163, 115, 0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--dourado);
-        }
-
-        .detail-icon svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        .detail-label {
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--dourado);
-            margin-bottom: 6px;
-        }
-
-        .detail-value {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: var(--branco);
-            line-height: 1.3;
-        }
-
-        /* ========== CONTAGEM REGRESSIVA ========== */
-        .countdown-section {
-            text-align: center;
-        }
-
-        .countdown-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            font-weight: 300;
-            margin-bottom: 8px;
-            color: var(--branco);
-        }
-
-        .countdown-sub {
-            font-size: 0.8rem;
-            color: var(--dourado);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 32px;
-        }
-
-        .countdown-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .countdown-box {
-            background: rgba(15, 41, 30, 0.6);
-            border: 1px solid rgba(212, 163, 115, 0.25);
-            border-radius: 16px;
-            padding: 16px 4px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .countdown-box::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
-            opacity: 0.6;
-        }
-
-        .countdown-number {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--dourado-claro);
-            line-height: 1;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .countdown-number.pop {
-            animation: countPop 0.4s ease;
-        }
-
-        .countdown-label {
-            font-size: 0.6rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--rosa-antigo);
-            margin-top: 6px;
-            opacity: 0.8;
-        }
-
-        .countdown-message {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            font-style: italic;
-            color: var(--dourado);
-            margin-top: 20px;
-            min-height: 28px;
-        }
-
-        /* ========== BOTÕES ========== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 18px 28px;
-            border: none;
-            border-radius: 50px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--dourado), #bc8a5f);
-            color: var(--verde-escuro);
-            box-shadow: 0 4px 20px rgba(212, 163, 115, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(212, 163, 115, 0.5);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-whatsapp {
-            background: linear-gradient(135deg, #25d366, #128c7e);
-            color: white;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.25);
-            margin-top: 12px;
-        }
-
-        .btn-whatsapp:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid var(--dourado);
-            color: var(--dourado);
-        }
-
-        .btn-outline:hover {
-            background: rgba(212, 163, 115, 0.1);
-        }
-
-        /* ========== SEÇÃO CONFIRMAÇÃO ========== */
-        .confirm-section {
-            text-align: center;
-        }
-
-        .confirm-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            line-height: 1.6;
-            color: var(--rosa-antigo);
-            margin-bottom: 28px;
-        }
-
-        .confirm-highlight {
-            color: var(--dourado-claro);
-            font-weight: 600;
-        }
-
-        /* ========== MODAL ========== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 41, 30, 0.9);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: linear-gradient(180deg, #1b4332, #0f291e);
-            border: 1px solid rgba(212, 163, 115, 0.3);
-            border-radius: 32px 32px 0 0;
-            width: 100%;
-            max-width: 480px;
-            padding: 32px 28px 40px;
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .modal-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.6rem;
-            color: var(--branco);
-            margin-bottom: 4px;
-        }
-
-        .modal-subtitle {
-            font-size: 0.8rem;
-            color: var(--dourado);
-            letter-spacing: 1px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--dourado);
-            margin-bottom: 8px;
-        }
-
-        .form-input, .form-select {
-            width: 100%;
-            padding: 16px 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 163, 115, 0.25);
-            border-radius: 14px;
-            color: var(--branco);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.3s ease;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .form-input:focus, .form-select:focus {
-            border-color: var(--dourado);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.15);
-        }
-
-        .form-input::placeholder {
-            color: rgba(250, 237, 205, 0.4);
-        }
-
-        .form-select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-        }
-
-        .form-select option {
-            background: var(--verde-escuro);
-            color: var(--branco);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 16px;
-            right: 20px;
-            width: 36px;
-            height: 36px;
-            background: rgba(255,255,255,0.08);
-            border: none;
-            border-radius: 50%;
-            color: var(--creme);
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover {
-            background: rgba(255,255,255,0.15);
-            transform: rotate(90deg);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .modal-actions .btn {
-            flex: 1;
-        }
-
-        /* ========== FOOTER ========== */
-        .footer {
-            text-align: center;
-            padding: 40px 24px 60px;
-            opacity: 0.5;
-        }
-
-        .footer-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            font-style: italic;
-            color: var(--dourado);
-        }
-
-        /* ========== VINES DECORATIVAS ========== */
-        .vine {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0.15;
-            z-index: 0;
-        }
-
-        .vine-left {
-            left: -20px;
-            top: 10%;
-            width: 80px;
-        }
-
-        .vine-right {
-            right: -20px;
-            top: 40%;
-            width: 80px;
-            transform: scaleX(-1);
-        }
-
-        /* ========== RESPONSIVO EXTRA ========== */
-        @media (max-width: 360px) {
-            .hero-title { font-size: 2.6rem; }
-            .countdown-number { font-size: 1.6rem; }
-            .countdown-grid { gap: 6px; }
-        }
-    </style>
-<base target="_blank">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Você é especial</title>
+
+<!-- Only external resource used: a webfont, for the emotional typography of the final message. No external images are used — every visual element below is drawn with SVG/CSS/Canvas. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     TOKENS — palette pulled straight from the reference artwork:
+     a near-black violet void, glowing amethyst petals, a warm
+     ivory throat, and deep emerald foliage.
+     ============================================================ */
+  :root{
+    --void:        #050212;
+    --void-2:      #0c0620;
+    --nebula-1:    #2a0e52;
+    --nebula-2:    #1b0a38;
+    --petal-pale:  #f1e4ff;
+    --petal-light: #d3aefc;
+    --petal-mid:   #a879f2;
+    --petal-deep:  #6f37c9;
+    --petal-ink:   #4a1f96;
+    --throat:      #fbf6ff;
+    --stamen:      #ffe9a8;
+    --leaf-hi:     #6fe08a;
+    --leaf-mid:    #2fae5c;
+    --leaf-dark:   #0f5a34;
+    --foliage-1:   #7c3fd6;
+    --foliage-2:   #582aa8;
+    --foliage-3:   #34156b;
+    --spark-warm:  #ffe9b0;
+    --spark-cool:  #d9b6ff;
+    --glow:        #b57bf5;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    background:var(--void);
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  body{
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Jost', sans-serif;
+  }
+
+  /* Full-bleed stage. Everything lives on top of each other:
+     0) deep ambient glow (CSS)
+     1) drifting light-mote canvas (JS)
+     2) the SVG artwork (flowers/leaves)
+     3) the closing message
+  */
+  #stage{
+    position:relative;
+    width:100vw; height:100dvh;
+    overflow:hidden;
+    background:radial-gradient(ellipse 120% 90% at 50% 115%, var(--nebula-1) 0%, var(--void-2) 45%, var(--void) 78%);
+  }
+
+  /* Soft breathing aura behind the whole scene — very subtle,
+     it "reinforces the sense of enchantment" without stealing focus. */
+  #aura{
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 50% 62%, rgba(181,123,245,0.35) 0%, rgba(181,123,245,0.12) 30%, transparent 65%);
+    opacity:0;
+    animation:auraIn 3s ease-out forwards, auraBreathe 6s ease-in-out 3s infinite;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  @keyframes auraIn{ to{ opacity:1; } }
+  @keyframes auraBreathe{
+    0%,100%{ transform:scale(1);   opacity:0.85; }
+    50%    { transform:scale(1.08);opacity:1;    }
+  }
+
+  canvas#motes{
+    position:absolute; inset:0; width:100%; height:100%;
+    pointer-events:none;
+  }
+
+  #art-wrap{
+    position:absolute; inset:0;
+    display:flex; align-items:flex-end; justify-content:center;
+    padding-bottom:2vh;
+  }
+
+  svg#art{
+    width:min(92vw, 62vh, 560px);
+    height:auto;
+    max-height:92dvh;
+    overflow:visible;
+    filter:drop-shadow(0 0 40px rgba(150,90,230,0.25));
+  }
+
+  /* every drawable primitive starts invisible; JS reveals them
+     in sequence so the composition "assembles itself" */
+  .draw{
+    stroke-dasharray: 1 1; /* real value is computed per-element in JS */
+    stroke-dashoffset: 1;
+  }
+  .fade-pop{
+    opacity:0;
+    transform-box:fill-box;
+    transform-origin:center;
+    transform:scale(0.4);
+  }
+  .grow{
+    opacity:0;
+    transform-box:fill-box;
+    transform-origin:bottom center;
+    transform:scaleY(0.15);
+  }
+
+  /* ---------------- message ---------------- */
+  #message{
+    position:absolute;
+    left:50%; top:50%;
+    transform:translate(-50%,-46%);
+    text-align:center;
+    z-index:5;
+    pointer-events:none;
+    width:90vw;
+  }
+
+  #message-glow{
+    position:absolute;
+    left:50%; top:50%;
+    width:120vmin; height:120vmin;
+    transform:translate(-50%,-50%) scale(0.6);
+    background:radial-gradient(circle, rgba(216,182,255,0.55) 0%, rgba(160,110,230,0.18) 32%, transparent 68%);
+    opacity:0;
+    filter:blur(4px);
+    mix-blend-mode:screen;
+    transition:opacity 1.8s ease-out, transform 2.2s cubic-bezier(.16,1,.3,1);
+  }
+  #message.show #message-glow{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+
+  #message h1{
+    position:relative;
+    margin:0;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(2.1rem, 8.5vw, 4.4rem);
+    letter-spacing:0.16em;
+    color:var(--petal-pale);
+    line-height:1.25;
+    filter:blur(14px);
+    opacity:0;
+    transform:translateY(22px);
+    transition:
+      opacity 1.7s cubic-bezier(.22,1,.36,1),
+      filter 1.7s cubic-bezier(.22,1,.36,1),
+      transform 1.7s cubic-bezier(.22,1,.36,1),
+      letter-spacing 1.9s cubic-bezier(.22,1,.36,1);
+
+    background:linear-gradient(100deg,
+      var(--petal-pale) 0%, var(--petal-pale) 35%,
+      #ffffff 48%,
+      var(--petal-pale) 61%, var(--petal-pale) 100%);
+    background-size:260% 100%;
+    background-position:0% 0%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 46px rgba(216,182,255,0.55);
+  }
+
+  #message.show h1{
+    opacity:1;
+    filter:blur(0px);
+    transform:translateY(0);
+    letter-spacing:0.04em;
+    animation:shimmer 4.5s ease-in-out 1.9s infinite, floatMsg 6s ease-in-out 1.9s infinite;
+  }
+  @keyframes shimmer{
+    0%   { background-position:0% 0%; }
+    50%  { background-position:100% 0%; }
+    100% { background-position:0% 0%; }
+  }
+  @keyframes floatMsg{
+    0%,100%{ transform:translateY(0px); }
+    50%    { transform:translateY(-8px); }
+  }
+
+  /* thin light rule that draws itself under the message, like a
+     brushstroke of underline — a quiet, single deliberate flourish */
+  #message .rule{
+    display:block;
+    margin:0.9em auto 0;
+    width:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--petal-light), transparent);
+    transition:width 1.4s cubic-bezier(.22,1,.36,1) 1.1s, opacity 1.4s ease 1.1s;
+    opacity:0;
+  }
+  #message.show .rule{ width:min(220px, 46vw); opacity:0.9; }
+
+  @media (prefers-reduced-motion: reduce){
+    #message.show h1{ animation:none; }
+    #aura{ animation:auraIn 1.2s ease-out forwards; }
+  }
+</style>
 </head>
 <body>
 
-    <!-- Fundos -->
-    <div class="bg-garden"></div>
-    <div class="bg-vignette"></div>
-    <canvas id="leaves-canvas"></canvas>
+<div id="stage">
+  <div id="aura"></div>
+  <canvas id="motes"></canvas>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-ornament">
-            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="45" stroke="#d4a373" stroke-width="0.5" opacity="0.4"/>
-                <circle cx="50" cy="50" r="35" stroke="#d4a373" stroke-width="0.5" opacity="0.3"/>
-                <path d="M50 15 C30 15, 15 30, 15 50 C15 70, 30 85, 50 85 C70 85, 85 70, 85 50 C85 30, 70 15, 50 15Z" stroke="#d4a373" stroke-width="0.5" fill="none" opacity="0.5"/>
-                <path d="M50 25 Q35 35 35 50 Q35 65 50 75 Q65 65 65 50 Q65 35 50 25" fill="#d4a373" opacity="0.15"/>
-                <path d="M50 5 L50 15 M50 85 L50 95 M5 50 L15 50 M85 50 L95 50" stroke="#d4a373" stroke-width="0.5" opacity="0.3"/>
-                <circle cx="50" cy="50" r="3" fill="#d4a373" opacity="0.6"/>
-                <path d="M50 50 Q45 30 25 25 Q45 35 50 50" fill="#40916c" opacity="0.4"/>
-                <path d="M50 50 Q55 30 75 25 Q55 35 50 50" fill="#40916c" opacity="0.4"/>
-                <path d="M50 50 Q45 70 25 75 Q45 65 50 50" fill="#40916c" opacity="0.4"/>
-                <path d="M50 50 Q55 70 75 75 Q55 65 50 50" fill="#40916c" opacity="0.4"/>
-            </svg>
-        </div>
-        <p class="hero-pretitle">Você está convidado</p>
-        <h1 class="hero-title">
-            Jardim
-            <span>Secreto</span>
-        </h1>
-        <p class="hero-subtitle">Uma noite de encanto e celebração</p>
-        <div class="divider" style="animation: fadeIn 1s ease-out 1.2s both;">
-            <div class="divider-line"></div>
-            <svg class="divider-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-                <path d="M12 6v6l4 2"/>
-            </svg>
-            <div class="divider-line"></div>
-        </div>
-        <div class="scroll-indicator">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
-                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
-            </svg>
-        </div>
-    </section>
+  <div id="art-wrap">
+    <!-- ============================================================
+         The artwork. ViewBox is a tall portrait canvas mirroring the
+         reference photo's framing: three amethyst blooms rising out
+         of a bed of deep-violet foliage, flanked by tall grass, all
+         glowing softly against the dark.
+         ============================================================ -->
+    <svg id="art" viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Três flores roxas brilhantes desabrochando sobre um fundo escuro">
+      <defs>
+        <radialGradient id="gGround" cx="50%" cy="100%" r="75%">
+          <stop offset="0%" stop-color="#5a2fb0" stop-opacity="0.55"/>
+          <stop offset="45%" stop-color="#2a1160" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#2a1160" stop-opacity="0"/>
+        </radialGradient>
 
-    <div class="container">
-        <!-- DETALHES -->
-        <section>
-            <div class="details-card reveal">
-                <div class="detail-item">
-                    <div class="detail-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2"/>
-                            <path d="M16 2v4M8 2v4M3 10h18"/>
-                        </svg>
-                    </div>
-                    <div class="detail-label">Data</div>
-                    <div class="detail-value">19 de Setembro</div>
-                </div>
-                <div class="divider">
-                    <div class="divider-line"></div>
-                    <svg class="divider-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
-                    <div class="divider-line"></div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 6v6l4 2"/>
-                        </svg>
-                    </div>
-                    <div class="detail-label">Horário</div>
-                    <div class="detail-value">18:00</div>
-                </div>
-                <div class="divider">
-                    <div class="divider-line"></div>
-                    <svg class="divider-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
-                    <div class="divider-line"></div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                    </div>
-                    <div class="detail-label">Local</div>
-                    <div class="detail-value">Rua das Flores, 123<br><small style="font-size:0.9rem;opacity:0.7;">Jardim Botânico</small></div>
-                </div>
-            </div>
-        </section>
+        <linearGradient id="gBlade" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%"  stop-color="var(--leaf-dark)"/>
+          <stop offset="55%" stop-color="var(--leaf-mid)"/>
+          <stop offset="100%" stop-color="var(--leaf-hi)"/>
+        </linearGradient>
 
-        <!-- CONTAGEM REGRESSIVA -->
-        <section class="countdown-section reveal">
-            <h2 class="countdown-title">A Magia Começa Em</h2>
-            <p class="countdown-sub">Contagem regressiva</p>
-            <div class="countdown-grid">
-                <div class="countdown-box">
-                    <span class="countdown-number" id="days">00</span>
-                    <div class="countdown-label">Dias</div>
-                </div>
-                <div class="countdown-box">
-                    <span class="countdown-number" id="hours">00</span>
-                    <div class="countdown-label">Horas</div>
-                </div>
-                <div class="countdown-box">
-                    <span class="countdown-number" id="minutes">00</span>
-                    <div class="countdown-label">Min</div>
-                </div>
-                <div class="countdown-box">
-                    <span class="countdown-number" id="seconds">00</span>
-                    <div class="countdown-label">Seg</div>
-                </div>
-            </div>
-            <p class="countdown-message" id="countdown-msg">Preparando o jardim...</p>
-        </section>
+        <linearGradient id="gFoliage" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%"  stop-color="var(--foliage-3)"/>
+          <stop offset="55%" stop-color="var(--foliage-2)"/>
+          <stop offset="100%" stop-color="var(--foliage-1)"/>
+        </linearGradient>
 
-        <!-- CONFIRMAÇÃO -->
-        <section class="confirm-section reveal">
-            <div class="divider">
-                <div class="divider-line"></div>
-                <svg class="divider-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <div class="divider-line"></div>
-            </div>
-            <p class="confirm-text">
-                Sua presença será a flor mais rara do nosso<br>
-                <span class="confirm-highlight">Jardim Secreto</span>.
-                Confirme sua presença e faça parte deste momento inesquecível.
-            </p>
-            <button class="btn btn-primary" onclick="openModal()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <path d="M20 6L9 17l-5-5"/>
-                </svg>
-                Confirmar Presença
-            </button>
-            <a href="#" class="btn btn-whatsapp" id="btn-wa-direct" target="_blank">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                Confirmar pelo WhatsApp
-            </a>
-        </section>
+        <linearGradient id="gStem" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%"  stop-color="var(--petal-ink)"/>
+          <stop offset="100%" stop-color="var(--petal-mid)"/>
+        </linearGradient>
 
-        <!-- FOOTER -->
-        <footer class="footer reveal">
-            <p class="footer-text">"Onde florescem flores, floresce a esperança"</p>
-            <p style="font-size:0.7rem; margin-top:8px; letter-spacing:2px; text-transform:uppercase;">Jardim Secreto • 2026</p>
-        </footer>
-    </div>
+        <radialGradient id="gPetal" cx="50%" cy="90%" r="90%">
+          <stop offset="0%"  stop-color="var(--petal-pale)"/>
+          <stop offset="45%" stop-color="var(--petal-light)"/>
+          <stop offset="100%" stop-color="var(--petal-deep)"/>
+        </radialGradient>
 
-    <!-- MODAL DE CONFIRMAÇÃO -->
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content" style="position:relative;">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <div class="modal-header">
-                <h3 class="modal-title">Confirmar Presença</h3>
-                <p class="modal-subtitle">Preencha seus dados abaixo</p>
-            </div>
-            <form id="confirmForm" onsubmit="handleConfirm(event)">
-                <div class="form-group">
-                    <label class="form-label">Seu Nome</label>
-                    <input type="text" class="form-input" id="guestName" placeholder="Digite seu nome completo" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Você irá?</label>
-                    <select class="form-select" id="guestResponse" required>
-                        <option value="" disabled selected>Selecione uma opção</option>
-                        <option value="Sim, confirmo minha presença!">Sim, vou com certeza!</option>
-                        <option value="Talvez, ainda não tenho certeza.">Talvez, ainda não tenho certeza</option>
-                        <option value="Infelizmente não poderei ir.">Infelizmente não poderei ir</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Acompanhantes</label>
-                    <select class="form-select" id="guestCount">
-                        <option value="0">Só eu</option>
-                        <option value="1">+1 acompanhante</option>
-                        <option value="2">+2 acompanhantes</option>
-                        <option value="3">+3 acompanhantes</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Observação (opcional)</label>
-                    <input type="text" class="form-input" id="guestNote" placeholder="Alguma restrição alimentar?">
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                            <path d="M20 6L9 17l-5-5"/>
-                        </svg>
-                        Enviar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+        <radialGradient id="gBell" cx="50%" cy="0%" r="100%">
+          <stop offset="0%"  stop-color="var(--petal-mid)"/>
+          <stop offset="100%" stop-color="var(--petal-ink)"/>
+        </radialGradient>
 
-    <script>
-        /* =========================================================
-           CONFIGURAÇÕES — ALTERE AQUI SEU NÚMERO DE WHATSAPP
-           ========================================================= */
-        const WHATSAPP_NUMBER = "5511999999999"; // <-- SUBSTITUA PELO SEU NÚMERO COM DDD (ex: 5511987654321)
-        const EVENT_DATE = new Date("2026-09-19T18:00:00").getTime();
-        const EVENT_NAME = "Jardim Secreto";
+        <radialGradient id="gThroat" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#ffffff"/>
+          <stop offset="70%" stop-color="var(--throat)"/>
+          <stop offset="100%" stop-color="var(--petal-light)" stop-opacity="0"/>
+        </radialGradient>
 
-        /* =========================================================
-           CONTAGEM REGRESSIVA ANIMADA
-           ========================================================= */
-        const els = {
-            days: document.getElementById('days'),
-            hours: document.getElementById('hours'),
-            minutes: document.getElementById('minutes'),
-            seconds: document.getElementById('seconds'),
-            msg: document.getElementById('countdown-msg')
-        };
+        <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="6" result="b"/>
+          <feMerge>
+            <feMergeNode in="b"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
 
-        let prevValues = { d: null, h: null, m: null, s: null };
+        <filter id="wideGlow" x="-150%" y="-150%" width="400%" height="400%">
+          <feGaussianBlur stdDeviation="14"/>
+        </filter>
+      </defs>
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = EVENT_DATE - now;
+      <!-- ambient ground glow, the very first thing to appear -->
+      <ellipse id="groundGlow" cx="300" cy="815" rx="230" ry="90" fill="url(#gGround)" opacity="0"/>
 
-            if (distance < 0) {
-                els.days.textContent = '00';
-                els.hours.textContent = '00';
-                els.minutes.textContent = '00';
-                els.seconds.textContent = '00';
-                els.msg.textContent = 'O grande dia chegou! 🌿✨';
-                return;
-            }
+      <!-- ===================== GRASS BLADES ===================== -->
+      <g id="grass" fill="url(#gBlade)" filter="url(#softGlow)"></g>
 
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
+      <!-- ===================== PURPLE FOLIAGE ===================== -->
+      <g id="foliage" filter="url(#softGlow)"></g>
 
-            const pad = (n) => String(n).padStart(2, '0');
+      <!-- ===================== STEMS ===================== -->
+      <g id="stems" fill="none" stroke="url(#gStem)" stroke-width="6" stroke-linecap="round"></g>
 
-            [['d', d, els.days], ['h', h, els.hours], ['m', m, els.minutes], ['s', s, els.seconds]].forEach(([key, val, el]) => {
-                const str = pad(val);
-                if (prevValues[key] !== str) {
-                    el.textContent = str;
-                    el.classList.remove('pop');
-                    void el.offsetWidth; // reflow
-                    el.classList.add('pop');
-                    prevValues[key] = str;
-                }
-            });
+      <!-- ===================== FLOWERS (populated by JS) ===================== -->
+      <g id="flowers"></g>
 
-            if (d === 0 && h === 0 && m === 0) {
-                els.msg.textContent = 'Faltam poucos segundos...';
-            } else if (d === 0 && h === 0) {
-                els.msg.textContent = 'Está quase na hora!';
-            } else if (d === 0) {
-                els.msg.textContent = 'O dia chegou! Prepare-se...';
-            } else if (d === 1) {
-                els.msg.textContent = 'Amanhã é o grande dia!';
-            } else {
-                els.msg.textContent = 'O jardim se prepara para te receber...';
-            }
-        }
+    </svg>
+  </div>
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+  <div id="message">
+    <h1>Você é especial</h1>
+    <span class="rule"></span>
+  </div>
+</div>
 
-        /* =========================================================
-           SCROLL REVEAL (INTERSECTION OBSERVER)
-           ========================================================= */
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+<script>
+(function(){
+  "use strict";
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  /* ---------------------------------------------------------------
+     Respect the user's motion preference: if they've asked for
+     reduced motion, we still tell the story, just calmly — one
+     gentle fade instead of a long choreographed sequence.
+  --------------------------------------------------------------- */
+  const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        /* =========================================================
-           MODAL
-           ========================================================= */
-        const modal = document.getElementById('modal');
+  const svgNS = "http://www.w3.org/2000/svg";
+  const $ = (sel, ctx) => (ctx || document).querySelector(sel);
+  const grassG   = $('#grass');
+  const foliageG = $('#foliage');
+  const stemsG   = $('#stems');
+  const flowersG = $('#flowers');
 
-        function openModal() {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => document.getElementById('guestName').focus(), 300);
-        }
+  const wait = (ms) => new Promise(res => setTimeout(res, ms));
 
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
+  function el(tag, attrs){
+    const node = document.createElementNS(svgNS, tag);
+    for(const k in attrs) node.setAttribute(k, attrs[k]);
+    return node;
+  }
 
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
+  /* =================================================================
+     GEOMETRY GENERATORS
+     Small deterministic helpers that build the organic shapes
+     (blades of grass, foliage blobs, petals) as SVG path strings,
+     so the composition stays hand-art-directed rather than random.
+  ================================================================= */
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-        });
+  // A tapered blade of grass rising from (x, baseY) to height h,
+  // leaning sideways by `lean` px at the tip, bowing by `bow`.
+  function bladePath(x, baseY, h, lean, bow, width){
+    const tipX = x + lean, tipY = baseY - h;
+    const midY = baseY - h * 0.55;
+    const c1x = x + bow, c1y = baseY - h * 0.3;
+    const c2x = tipX - bow * 0.4, c2y = midY;
+    return `M ${x - width/2},${baseY}
+            C ${c1x - width/2},${c1y} ${c2x - width/2},${c2y} ${tipX},${tipY}
+            C ${c2x + width/2},${c2y} ${c1x + width/2},${c1y} ${x + width/2},${baseY} Z`;
+  }
 
-        /* =========================================================
-           ENVIO DA CONFIRMAÇÃO VIA WHATSAPP
-           ========================================================= */
-        function handleConfirm(e) {
-            e.preventDefault();
-            const name = document.getElementById('guestName').value.trim();
-            const response = document.getElementById('guestResponse').value;
-            const count = document.getElementById('guestCount').value;
-            const note = document.getElementById('guestNote').value.trim();
+  // A soft organic leaf-blob used to build the violet foliage clump.
+  function leafBlob(cx, cy, w, h, rot){
+    const d = `M 0,0
+      C ${-w*0.55},${-h*0.15} ${-w*0.5},${-h*0.85} 0,${-h}
+      C ${w*0.5},${-h*0.85} ${w*0.55},${-h*0.15} 0,0 Z`;
+    return { d, transform:`translate(${cx},${cy}) rotate(${rot})` };
+  }
 
-            let message = `🌿 *Confirmação de Presença — ${EVENT_NAME}* 🌿
+  // A single flower petal, drawn pointing straight up from the
+  // flower's core, meant to be fanned out with a rotate() transform.
+  function petalPath(){
+    return `M 0,0
+      C -16,-14 -21,-42 -11,-70
+      C -6,-86 6,-86 11,-70
+      C 21,-42 16,-14 0,0 Z`;
+  }
 
-`;
-            message += `👤 *Nome:* ${name}
-`;
-            message += `✅ *Resposta:* ${response}
-`;
-            message += `👥 *Acompanhantes:* ${count === '0' ? 'Nenhum' : count}
-`;
-            if (note) message += `📝 *Observação:* ${note}
-`;
-            message += `
-_Enviado pelo convite digital_`;
+  /* =================================================================
+     BUILD: GRASS
+  ================================================================= */
+  const bladeSpecs = [
+    // [x, baseY, height, lean, bow, width]
+    [96,  832, 300,  10, 18, 14],
+    [128, 838, 380, -18, 26, 16],
+    [160, 836, 260,  22, 14, 11],
+    [188, 840, 430, -8, 30, 18],
+    [214, 834, 200,  16, 10, 10],
 
-            const encoded = encodeURIComponent(message);
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+    [404, 838, 210, -14, 12, 10],
+    [430, 834, 400,  16, 28, 17],
+    [458, 840, 300, -20, 18, 13],
+    [486, 836, 360,  12, 24, 15],
+    [512, 830, 230, -10, 12, 11],
+  ];
 
-            window.open(waUrl, '_blank');
-            closeModal();
+  const bladeEls = bladeSpecs.map(spec => {
+    const p = el('path', { d: bladePath(...spec), opacity:'0', class:'blade' });
+    grassG.appendChild(p);
+    return p;
+  });
 
-            // Feedback visual temporário
-            const btn = document.querySelector('.btn-primary');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Enviado!';
-            setTimeout(() => btn.innerHTML = originalText, 3000);
-        }
+  /* =================================================================
+     BUILD: FOLIAGE (the violet leaf clump at the base of the blooms)
+  ================================================================= */
+  const foliageSpecs = [
+    [244, 828, 120, 210, -18],
+    [300, 838, 130, 230,   4],
+    [356, 826, 118, 200,  22],
+    [212, 822,  90, 150, -34],
+    [388, 820,  92, 155,  32],
+    [270, 812,  80, 130, -6],
+    [332, 812,  80, 128,   9],
+  ];
 
-        // Botão direto do WhatsApp (sem formulário)
-        document.getElementById('btn-wa-direct').addEventListener('click', function(e) {
-            e.preventDefault();
-            const msg = encodeURIComponent(`Olá! Gostaria de confirmar minha presença no aniversário *${EVENT_NAME}* 🌿`);
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-        });
+  const foliageEls = foliageSpecs.map((spec, i) => {
+    const [cx, cy, w, h, rot] = spec;
+    const shape = leafBlob(cx, cy, w, h, rot);
+    const p = el('path', {
+      d: shape.d, transform: shape.transform,
+      fill: 'url(#gFoliage)', class:'fade-pop foliage-leaf'
+    });
+    foliageG.appendChild(p);
+    return p;
+  });
 
-        /* =========================================================
-           PARTÍCULAS DE FOLHAS (CANVAS)
-           ========================================================= */
-        const canvas = document.getElementById('leaves-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        const leaves = [];
-        const leafColors = ['rgba(64, 145, 108, 0.3)', 'rgba(45, 106, 79, 0.25)', 'rgba(212, 163, 115, 0.15)', 'rgba(233, 196, 106, 0.1)'];
+  /* =================================================================
+     BUILD: STEMS + FLOWERS
+  ================================================================= */
+  const blooms = [
+    { base:[300, 812], tip:[300, 232], curve:[300, 520], scale:1.18, rot:0   },
+    { base:[224, 818], tip:[196, 318], curve:[190, 560], scale:0.86, rot:-9  },
+    { base:[372, 820], tip:[398, 356], curve:[404, 580], scale:0.80, rot:11  },
+  ];
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener('resize', resize);
+  const stemEls = [];
+  const flowerGroups = [];
 
-        class Leaf {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = -20;
-                this.size = Math.random() * 6 + 3;
-                this.speedY = Math.random() * 0.8 + 0.3;
-                this.speedX = Math.random() * 0.6 - 0.3;
-                this.rotation = Math.random() * 360;
-                this.rotationSpeed = Math.random() * 1.5 - 0.75;
-                this.color = leafColors[Math.floor(Math.random() * leafColors.length)];
-                this.opacity = Math.random() * 0.4 + 0.1;
-                this.sway = Math.random() * 0.02 + 0.01;
-                this.swayOffset = Math.random() * Math.PI * 2;
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX + Math.sin(this.y * this.sway + this.swayOffset) * 0.5;
-                this.rotation += this.rotationSpeed;
-                if (this.y > height + 20) this.reset();
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation * Math.PI / 180);
-                ctx.globalAlpha = this.opacity;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
+  blooms.forEach((b, i) => {
+    const [bx,by] = b.base, [tx,ty] = b.tip, [cx,cy] = b.curve;
+    const d = `M ${bx},${by} Q ${cx},${cy} ${tx},${ty}`;
+    const stem = el('path', { d, opacity:'0', class:'stem' });
+    stemsG.appendChild(stem);
+    stemEls.push(stem);
 
-        for (let i = 0; i < 35; i++) {
-            const leaf = new Leaf();
-            leaf.y = Math.random() * height; // distribuir inicialmente
-            leaves.push(leaf);
-        }
+    // flower group, positioned + oriented at the stem tip
+    const g = el('g', {
+      transform:`translate(${tx},${ty}) rotate(${b.rot}) scale(${b.scale})`,
+      opacity:'0'
+    });
 
-        function animateLeaves() {
-            ctx.clearRect(0, 0, width, height);
-            leaves.forEach(leaf => {
-                leaf.update();
-                leaf.draw();
-            });
-            requestAnimationFrame(animateLeaves);
-        }
-        animateLeaves();
+    // bell / sepal base sitting just beneath the petals
+    const bell = el('path', {
+      d:'M -30,10 C -30,34 -16,52 0,52 C 16,52 30,34 30,10 C 30,-4 -30,-4 -30,10 Z',
+      fill:'url(#gBell)', class:'bell fade-pop'
+    });
+    g.appendChild(bell);
 
-        /* =========================================================
-           PARALLAX SUAVE NO SCROLL
-           ========================================================= */
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const scrolled = window.pageYOffset;
-                    const parallax = document.querySelector('.hero-ornament');
-                    if (parallax) {
-                        parallax.style.transform = `translateY(${scrolled * 0.15}px) rotate(${scrolled * 0.05}deg)`;
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-    </script>
+    // petals, fanned around the core
+    const petalAngles = [-58, -29, 0, 29, 58];
+    const petalEls = petalAngles.map(a => {
+      const p = el('path', {
+        d: petalPath(),
+        transform:`rotate(${a})`,
+        fill:'url(#gPetal)',
+        class:'fade-pop petal'
+      });
+      g.appendChild(p);
+      return p;
+    });
+
+    // soft under-glow disc for the bloom (adds the neon "backlit" feel)
+    const halo = el('circle', {
+      cx:0, cy:-18, r:46, fill:'var(--glow)', opacity:'0',
+      filter:'url(#wideGlow)', class:'halo'
+    });
+    g.insertBefore(halo, bell);
+
+    // throat + stamen
+    const throat = el('ellipse', { cx:0, cy:-14, rx:15, ry:11, fill:'url(#gThroat)', class:'fade-pop' });
+    g.appendChild(throat);
+    const stamen = el('circle', { cx:0, cy:-18, r:4.2, fill:'var(--stamen)', class:'fade-pop' });
+    g.appendChild(stamen);
+
+    flowersG.appendChild(g);
+    flowerGroups.push({ g, petalEls, bell, throat, stamen, halo });
+  });
+
+  /* =================================================================
+     ANIMATION HELPERS
+  ================================================================= */
+
+  // Prepares a path for a "drawing" (stroke reveal) animation by
+  // measuring its real rendered length, so the dash math is exact.
+  function primeDraw(pathEl){
+    const len = pathEl.getTotalLength();
+    pathEl.style.strokeDasharray = `${len}`;
+    pathEl.style.strokeDashoffset = `${len}`;
+    pathEl.style.opacity = '1';
+    return len;
+  }
+
+  function animateDraw(pathEl, duration){
+    return new Promise(resolve => {
+      const len = primeDraw(pathEl);
+      pathEl.animate(
+        [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+        { duration, easing:'cubic-bezier(.22,1,.36,1)', fill:'forwards' }
+      ).onfinish = resolve;
+    });
+  }
+
+  function animatePop(elm, duration, opts){
+    opts = opts || {};
+    const scaleFrom = opts.scaleFrom ?? 0.35;
+    return new Promise(resolve => {
+      elm.style.opacity = '1';
+      elm.animate(
+        [
+          { opacity:0, transform:`scale(${scaleFrom})` },
+          { opacity:1, transform:'scale(1.08)', offset:0.72 },
+          { opacity:1, transform:'scale(1)' }
+        ],
+        { duration, easing:'cubic-bezier(.22,1,.36,1)', fill:'forwards' }
+      ).onfinish = resolve;
+    });
+  }
+
+  function animateGrow(elm, duration){
+    return new Promise(resolve => {
+      elm.style.opacity = '1';
+      elm.animate(
+        [
+          { opacity:0, transform:'scaleY(0.2)' },
+          { opacity:1, transform:'scaleY(1)' }
+        ],
+        { duration, easing:'cubic-bezier(.2,.9,.3,1)', fill:'forwards' }
+      ).onfinish = resolve;
+    });
+  }
+
+  function pulse(elm, peakOpacity, duration){
+    return new Promise(resolve => {
+      elm.animate(
+        [{ opacity:0 }, { opacity:peakOpacity, offset:0.4 }, { opacity:peakOpacity*0.6 }],
+        { duration, easing:'ease-out', fill:'forwards' }
+      ).onfinish = resolve;
+    });
+  }
+
+  /* =================================================================
+     CANVAS — drifting light motes (pollen / fireflies / sparkle dust)
+     Continues gently forever, density scaled to the viewport so
+     modest phones stay smooth and near 60fps.
+  ================================================================= */
+  const canvas = $('#motes');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR;
+  let motes = [];
+  let sparkBudget = 0; // one-off sparkle bursts queued by the bloom sequence
+
+  function sizeCanvas(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth = window.innerWidth;
+    H = canvas.clientHeight = window.innerHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  function makeMote(spawnLow){
+    const area = W * H;
+    return {
+      x: Math.random() * W,
+      y: spawnLow ? H + Math.random()*40 : Math.random()*H,
+      r: Math.random() * 1.6 + 0.6,
+      speed: Math.random() * 18 + 8,      // px/sec upward
+      drift: (Math.random() - 0.5) * 10,  // horizontal sway px/sec
+      phase: Math.random() * Math.PI * 2,
+      warmth: Math.random(), // 0 = cool violet, 1 = warm gold
+      life: 0
+    };
+  }
+
+  function initMotes(){
+    const area = W * H;
+    const count = REDUCE ? 0 : Math.max(18, Math.min(90, Math.floor(area / 13000)));
+    motes = new Array(count).fill(0).map(() => makeMote(false));
+  }
+
+  let lastT = performance.now();
+  function tickMotes(now){
+    const dt = Math.min(0.05, (now - lastT) / 1000);
+    lastT = now;
+    ctx.clearRect(0,0,W,H);
+
+    for(const m of motes){
+      m.life += dt;
+      m.y -= m.speed * dt;
+      m.x += Math.sin(m.life * 1.2 + m.phase) * m.drift * dt;
+      if(m.y < -10){ Object.assign(m, makeMote(true)); }
+
+      const twinkle = 0.5 + 0.5 * Math.sin(m.life * 2.2 + m.phase);
+      const alpha = 0.15 + twinkle * 0.55;
+      const color = m.warmth > 0.6 ? '255,233,176' : '216,182,255';
+
+      ctx.beginPath();
+      const grad = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r*4);
+      grad.addColorStop(0, `rgba(${color},${alpha})`);
+      grad.addColorStop(1, `rgba(${color},0)`);
+      ctx.fillStyle = grad;
+      ctx.arc(m.x, m.y, m.r*4, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${color},${Math.min(1,alpha+0.25)})`;
+      ctx.arc(m.x, m.y, m.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(tickMotes);
+  }
+
+  sizeCanvas();
+  initMotes();
+  requestAnimationFrame(tickMotes);
+  window.addEventListener('resize', () => { sizeCanvas(); initMotes(); });
+
+  /* =================================================================
+     THE MAGIC — orchestrated formation sequence
+  ================================================================= */
+  async function bloomOneFlower(fg, stemEl, stemDur){
+    await animateDraw(stemEl, stemDur);
+    await animatePop(fg.g.parentElement === flowersG ? fg.g : fg.g, 1); // no-op guard
+    fg.g.style.opacity = '1';
+    await pulse(fg.halo, 0.55, 900);
+    await animatePop(fg.bell, 420, { scaleFrom:0.5 });
+    for(let i=0;i<fg.petalEls.length;i++){
+      animatePop(fg.petalEls[i], 520, { scaleFrom:0.2 });
+      await wait(85);
+    }
+    await wait(160);
+    animatePop(fg.throat, 380, { scaleFrom:0.3 });
+    await wait(90);
+    animatePop(fg.stamen, 320, { scaleFrom:0.2 });
+    await wait(200);
+  }
+
+  async function runSequence(){
+    // 1) the ground softly ignites — the "planting" moment
+    await pulse($('#groundGlow'), 1, 1400);
+
+    // 2) grass rises out of the dark, staggered
+    const grassPromises = bladeEls.map((b, i) => wait(i*70).then(() => animateDraw(b, 850)));
+    await wait(300);
+
+    // 3) violet foliage blooms open beneath where the flowers will stand
+    foliageEls.forEach((f, i) => wait(i*90).then(() => animatePop(f, 620)));
+
+    await Promise.all(grassPromises);
+    await wait(150);
+
+    // 4) each stem climbs, then its flower unfurls — center first,
+    //    like the composition is finding its balance outward
+    const order = [0,1,2];
+    for(const idx of order){
+      await bloomOneFlower(flowerGroups[idx], stemEls[idx], 780);
+    }
+
+    // 5) let the fully formed scene breathe for a moment
+    await wait(1100);
+
+    // 6) reveal the message
+    $('#message').classList.add('show');
+  }
+
+  async function runReduced(){
+    // One calm, single fade for people who prefer minimal motion.
+    $('#groundGlow').style.transition = 'opacity 1s ease';
+    $('#groundGlow').style.opacity = '1';
+
+    [...bladeEls, ...foliageEls].forEach(elx => { elx.style.transition = 'opacity 1s ease'; elx.style.opacity='1'; primeSimple(elx); });
+    stemEls.forEach(s => { primeDraw(s); s.style.transition='stroke-dashoffset 1s ease'; requestAnimationFrame(()=> s.style.strokeDashoffset='0'); });
+    flowerGroups.forEach(fg => {
+      fg.g.style.transition = 'opacity 1s ease';
+      fg.g.style.opacity = '1';
+      [fg.bell, ...fg.petalEls, fg.throat, fg.stamen].forEach(x=>{ x.style.transition='opacity 1s ease'; x.style.opacity='1'; });
+      fg.halo.style.opacity = '0.35';
+    });
+
+    function primeSimple(elx){ elx.style.transform = 'none'; }
+
+    await wait(1400);
+    $('#message').classList.add('show');
+  }
+
+  // Kick off once the page has settled.
+  window.addEventListener('load', () => {
+    if(REDUCE){ runReduced(); } else { runSequence(); }
+  });
+
+})();
+</script>
 </body>
 </html>
