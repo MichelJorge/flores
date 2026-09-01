@@ -113,6 +113,13 @@
     transform-origin:center;
     transform:scale(0.4);
   }
+  /* Used by elements that need a fixed CSS transform (translate/rotate)
+     baked in via JS (data-base) — this class only sets the fill-box,
+     never a transform, so it can't clobber that positioning. */
+  .tf{
+    transform-box:fill-box;
+    transform-origin:center;
+  }
   .grow{
     opacity:0;
     transform-box:fill-box;
@@ -402,13 +409,20 @@
     [332, 812,  80, 128,   9],
   ];
 
+  // NOTE: each leaf keeps its position/rotation baked into a CSS
+  // transform (never an SVG "transform" attribute) so that the later
+  // scale-in animation — also CSS — never clobbers its placement.
   const foliageEls = foliageSpecs.map((spec, i) => {
     const [cx, cy, w, h, rot] = spec;
     const shape = leafBlob(cx, cy, w, h, rot);
+    const base = `translate(${cx}px,${cy}px) rotate(${rot}deg)`;
     const p = el('path', {
-      d: shape.d, transform: shape.transform,
-      fill: 'url(#gFoliage)', class:'fade-pop foliage-leaf'
+      d: shape.d,
+      fill: 'url(#gFoliage)', class:'tf foliage-leaf'
     });
+    p.style.opacity = '0';
+    p.style.transform = `${base} scale(0.35)`;
+    p.dataset.base = base;
     foliageG.appendChild(p);
     return p;
   });
@@ -445,15 +459,20 @@
     });
     g.appendChild(bell);
 
-    // petals, fanned around the core
+    // petals, fanned around the core. Rotation is baked into the CSS
+    // transform (via data-base) rather than the SVG "transform"
+    // attribute, so the pop-in scale animation doesn't erase the fan.
     const petalAngles = [-58, -29, 0, 29, 58];
     const petalEls = petalAngles.map(a => {
+      const base = `rotate(${a}deg)`;
       const p = el('path', {
         d: petalPath(),
-        transform:`rotate(${a})`,
         fill:'url(#gPetal)',
-        class:'fade-pop petal'
+        class:'tf petal'
       });
+      p.style.opacity = '0';
+      p.style.transform = `${base} scale(0.2)`;
+      p.dataset.base = base;
       g.appendChild(p);
       return p;
     });
@@ -502,16 +521,26 @@
   function animatePop(elm, duration, opts){
     opts = opts || {};
     const scaleFrom = opts.scaleFrom ?? 0.35;
+    // `base` is any fixed CSS transform (translate/rotate) the element
+    // needs to keep — e.g. a petal's fan angle, or a leaf's position.
+    // It's prepended to every keyframe so the scale animation never
+    // wipes out that placement.
+    const base = elm.dataset.base ? elm.dataset.base + ' ' : '';
     return new Promise(resolve => {
       elm.style.opacity = '1';
       elm.animate(
         [
-          { opacity:0, transform:`scale(${scaleFrom})` },
-          { opacity:1, transform:'scale(1.08)', offset:0.72 },
-          { opacity:1, transform:'scale(1)' }
+          { opacity:0, transform:`${base}scale(${scaleFrom})` },
+          { opacity:1, transform:`${base}scale(1.08)`, offset:0.72 },
+          { opacity:1, transform:`${base}scale(1)` }
         ],
         { duration, easing:'cubic-bezier(.22,1,.36,1)', fill:'forwards' }
-      ).onfinish = resolve;
+      ).onfinish = () => {
+        // Pin the final transform as a plain inline style too, so the
+        // result doesn't depend on the animation's "fill" persisting.
+        elm.style.transform = `${base}scale(1)`;
+        resolve();
+      };
     });
   }
 
@@ -550,9 +579,11 @@
 
   function sizeCanvas(){
     DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = canvas.clientWidth = window.innerWidth;
-    H = canvas.clientHeight = window.innerHeight;
-    canvas.width = W * DPR;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    canvas.width  = W * DPR;
     canvas.height = H * DPR;
     ctx.setTransform(DPR,0,0,DPR,0,0);
   }
@@ -620,7 +651,10 @@
   ================================================================= */
   async function bloomOneFlower(fg, stemEl, stemDur){
     await animateDraw(stemEl, stemDur);
-    await animatePop(fg.g.parentElement === flowersG ? fg.g : fg.g, 1); // no-op guard
+    // The flower group's own position comes from its SVG "transform"
+    // attribute (translate/rotate/scale) — we only ever fade its
+    // opacity, never touch its CSS transform, so that placement stays intact.
+    fg.g.style.transition = 'opacity 420ms ease';
     fg.g.style.opacity = '1';
     await pulse(fg.halo, 0.55, 900);
     await animatePop(fg.bell, 420, { scaleFrom:0.5 });
@@ -668,16 +702,38 @@
     $('#groundGlow').style.transition = 'opacity 1s ease';
     $('#groundGlow').style.opacity = '1';
 
-    [...bladeEls, ...foliageEls].forEach(elx => { elx.style.transition = 'opacity 1s ease'; elx.style.opacity='1'; primeSimple(elx); });
-    stemEls.forEach(s => { primeDraw(s); s.style.transition='stroke-dashoffset 1s ease'; requestAnimationFrame(()=> s.style.strokeDashoffset='0'); });
-    flowerGroups.forEach(fg => {
-      fg.g.style.transition = 'opacity 1s ease';
-      fg.g.style.opacity = '1';
-      [fg.bell, ...fg.petalEls, fg.throat, fg.stamen].forEach(x=>{ x.style.transition='opacity 1s ease'; x.style.opacity='1'; });
-      fg.halo.style.opacity = '0.35';
+    // Grass has no positional transform to preserve — plain fade is fine.
+    bladeEls.forEach(elx => { elx.style.transition = 'opacity 1s ease'; elx.style.opacity='1'; elx.style.transform='none'; });
+
+    // Foliage leaves DO carry a positional base transform (translate+rotate)
+    // in data-base — keep it, only settle the scale to 1.
+    foliageEls.forEach(elx => {
+      const base = elx.dataset.base ? elx.dataset.base + ' ' : '';
+      elx.style.transition = 'opacity 1s ease, transform 1s ease';
+      elx.style.opacity = '1';
+      elx.style.transform = `${base}scale(1)`;
     });
 
-    function primeSimple(elx){ elx.style.transform = 'none'; }
+    stemEls.forEach(s => { primeDraw(s); s.style.transition='stroke-dashoffset 1s ease'; requestAnimationFrame(()=> s.style.strokeDashoffset='0'); });
+
+    flowerGroups.forEach(fg => {
+      // The group's own translate/rotate/scale lives in its SVG
+      // "transform" attribute — only fade opacity, never touch its CSS transform.
+      fg.g.style.transition = 'opacity 1s ease';
+      fg.g.style.opacity = '1';
+
+      [fg.bell, fg.throat, fg.stamen].forEach(x=>{ x.style.transition='opacity 1s ease'; x.style.opacity='1'; });
+
+      // Petals carry their fan angle in data-base.
+      fg.petalEls.forEach(p => {
+        const base = p.dataset.base ? p.dataset.base + ' ' : '';
+        p.style.transition = 'opacity 1s ease, transform 1s ease';
+        p.style.opacity = '1';
+        p.style.transform = `${base}scale(1)`;
+      });
+
+      fg.halo.style.opacity = '0.35';
+    });
 
     await wait(1400);
     $('#message').classList.add('show');
